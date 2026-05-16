@@ -34,6 +34,7 @@ export function HeroSection() {
 
   return (
     <section
+      aria-labelledby="hero-heading"
       className="relative border-b border-slate-200/70 px-4 pb-12 pt-5 sm:px-6 lg:px-8"
       style={{
         ...getToneCssVars(tone),
@@ -61,6 +62,51 @@ export function HeroSection() {
       />
       <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[hsl(44_38%_97%)] to-transparent" />
 
+      <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between">
+        <a
+          className="font-display text-lg font-semibold tracking-tight text-slate-950"
+          href="#"
+        >
+          Tonight Lab
+        </a>
+        <nav aria-label="页内导航" className="hidden sm:block">
+          <ul className="flex items-center gap-1 text-sm font-medium text-slate-600">
+            <li>
+              <a
+                className="rounded-full px-3 py-1.5 hover:bg-slate-100"
+                href="#experience"
+              >
+                手机预览
+              </a>
+            </li>
+            <li>
+              <a
+                className="rounded-full px-3 py-1.5 hover:bg-slate-100"
+                href="#scenarios"
+              >
+                四个场景
+              </a>
+            </li>
+            <li>
+              <a
+                className="rounded-full px-3 py-1.5 hover:bg-slate-100"
+                href="#signals"
+              >
+                信号
+              </a>
+            </li>
+            <li>
+              <a
+                className="rounded-full px-3 py-1.5 hover:bg-slate-100"
+                href="#flow"
+              >
+                交互流
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
       <div className="relative z-10 mx-auto grid min-h-[88svh] max-w-6xl items-center gap-9 lg:grid-cols-[minmax(0,1fr)_minmax(390px,0.72fr)] lg:gap-12">
         <div className="max-w-2xl pb-2 pt-8 lg:pt-0">
           <div className="flex flex-wrap items-center gap-3">
@@ -70,7 +116,10 @@ export function HeroSection() {
             </div>
             <ToneSwitcher value={tone} onChange={setTone} />
           </div>
-          <h1 className="mt-6 max-w-[680px] font-serif font-medium text-[44px] leading-[1.08] tracking-[-0.01em] text-slate-950 sm:text-[58px] lg:text-[72px]">
+          <h1
+            id="hero-heading"
+            className="mt-6 max-w-[680px] font-serif font-medium text-[44px] leading-[1.08] tracking-[-0.01em] text-slate-950 sm:text-[58px] lg:text-[72px]"
+          >
             AI 情境卡，
             <br className="hidden sm:inline" />
             把下一步放回信息流。
