@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { ReactNode } from "react";
 
 import { BackToFeedButton } from "@/components/detail/BackToFeedButton";
+import { SavedRibbon } from "@/components/detail/SavedRibbon";
 import {
   AnimatedHeading,
   GrainOverlay,
@@ -133,8 +134,9 @@ export function DetailPageShell({
         <GrainOverlay opacity={0.07} className="-z-[5]" />
 
         {/* Back button */}
-        <div className="absolute left-4 top-5 z-20 sm:left-6 lg:left-8">
+        <div className="absolute left-4 right-4 top-5 z-20 flex items-center justify-between gap-3 sm:left-6 sm:right-6 lg:left-8 lg:right-8">
           <BackToFeedButton />
+          <SavedRibbon tone={tone} />
         </div>
 
         {/* L4 content */}
@@ -178,7 +180,10 @@ export function DetailPageShell({
 
       {/* Feature image — "first plate" */}
       <section className="relative z-10 mx-auto mt-10 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <figure className="relative overflow-hidden rounded-[36px] border border-white/70 shadow-phone">
+        <figure
+          className="relative overflow-hidden rounded-[36px] border border-white/70 shadow-phone"
+          style={{ viewTransitionName: `card-${tone}-cover` }}
+        >
           <div className="relative aspect-[16/9] bg-slate-950">
             <Image
               alt={title}
