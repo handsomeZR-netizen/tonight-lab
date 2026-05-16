@@ -81,3 +81,50 @@ a {
   }
 }
 
+@media print {
+  /* 隐 WebGL / 装饰层 */
+  canvas,
+  .grain-overlay,
+  [class*="bg-gradient"],
+  [aria-hidden="true"] {
+    display: none !important;
+  }
+
+  /* feed viewport 在落地页打印时无意义 */
+  #experience {
+    display: none !important;
+  }
+
+  /* 详情页打印优化 */
+  main {
+    background: white !important;
+    color: #0f172a !important;
+  }
+
+  /* 隐去 back-to-feed / 保存 ribbon / 互动控件 */
+  .no-print,
+  [aria-label="返回"],
+  button {
+    display: none !important;
+  }
+
+  /* 强制图片小一点 */
+  img {
+    max-width: 80% !important;
+    page-break-inside: avoid;
+  }
+
+  /* 标题不要孤行 */
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  /* footer */
+  footer {
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+  }
+}
+
