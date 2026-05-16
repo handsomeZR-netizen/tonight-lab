@@ -28,9 +28,9 @@ import { PhoneSpotlight } from "@/components/feed/PhoneSpotlight";
 import { PhoneSwipeIndicator } from "@/components/feed/PhoneSwipeIndicator";
 
 const productPoints = [
-  { label: "少一次退出", value: "边刷边决定", icon: Layers3 },
-  { label: "少一点纠结", value: "选项已经收窄", icon: BrainCircuit },
-  { label: "多一步行动", value: "直接保存或展开", icon: BellRing },
+  { label: "不打断浏览", value: "原地给下一步", icon: Layers3 },
+  { label: "不堆满答案", value: "只留可比较选项", icon: BrainCircuit },
+  { label: "不止是推荐", value: "能调整，也能保存", icon: BellRing },
 ];
 
 const scenarios = [
@@ -110,15 +110,15 @@ export default function Page() {
           <div className="max-w-2xl pb-2 pt-8 lg:pt-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/82 px-3 py-1 text-xs font-medium text-slate-700 shadow-soft backdrop-blur">
               <Sparkles className="h-3.5 w-3.5 text-amber-600" />
-              一份会读情境的内容流
+              AI 情境卡 · 信息流里的轻决策层
             </div>
             <h1 className="mt-6 max-w-[680px] font-serif font-medium text-[44px] leading-[1.08] tracking-[-0.01em] text-slate-950 sm:text-[58px] lg:text-[72px]">
-              把刚好用得上的那一条，
+              AI 情境卡，
               <br className="hidden sm:inline" />
-              留在你眼前。
+              把下一步放回信息流。
             </h1>
             <p className="mt-6 max-w-xl text-[15px] leading-[1.75] text-slate-600 sm:text-base">
-              AI 卡片不再单独成页，而是嵌进信息流——出现在你正要决定吃什么、去哪、看哪场比赛的那一刻。
+              用户刷到美食、路线、比赛或放松内容时，不用跳去另一个工具。卡片直接整理选项、解释原因，并把调整和保存留在当前页面。
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -126,13 +126,13 @@ export default function Page() {
                 className="inline-flex h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-semibold text-white shadow-phone transition hover:bg-slate-800"
                 href="#experience"
               >
-                体验信息流
+                进入手机预览
               </a>
               <a
                 className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white/82 px-5 text-sm font-semibold text-slate-800 shadow-soft backdrop-blur transition hover:border-slate-400 hover:bg-white"
                 href="#scenarios"
               >
-                查看场景
+                看四个场景
                 <ArrowDown className="h-4 w-4" />
               </a>
             </div>

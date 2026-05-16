@@ -64,9 +64,48 @@ const config: Config = {
           "Songti SC",
           "serif",
         ],
+        display: [
+          "var(--font-display)",
+          "var(--font-serif-sc)",
+          "ui-serif",
+          "Source Han Serif SC",
+          "Songti SC",
+          "serif",
+        ],
+      },
+      fontSize: {
+        "display-xl": [
+          "clamp(56px, 9vw, 128px)",
+          { lineHeight: "0.95", letterSpacing: "-0.02em" },
+        ],
+        "display-lg": [
+          "clamp(40px, 6vw, 80px)",
+          { lineHeight: "1.02", letterSpacing: "-0.015em" },
+        ],
+        "display-md": [
+          "clamp(32px, 4vw, 56px)",
+          { lineHeight: "1.08", letterSpacing: "-0.01em" },
+        ],
+        kicker: [
+          "12px",
+          { lineHeight: "1.4", letterSpacing: "0.18em" },
+        ],
+        marker: [
+          "14px",
+          { lineHeight: "1", letterSpacing: "0.04em" },
+        ],
+        stat: [
+          "clamp(48px, 7vw, 96px)",
+          { lineHeight: "0.92", letterSpacing: "-0.02em" },
+        ],
+        "stat-xl": [
+          "clamp(80px, 14vw, 200px)",
+          { lineHeight: "0.88", letterSpacing: "-0.03em" },
+        ],
       },
       boxShadow: {
-        phone: "0 24px 60px -20px rgba(15, 23, 42, 0.18), 0 8px 24px -12px rgba(15, 23, 42, 0.1)",
+        phone:
+          "0 24px 60px -20px rgba(15, 23, 42, 0.18), 0 8px 24px -12px rgba(15, 23, 42, 0.1)",
         soft: "0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06)",
       },
     },

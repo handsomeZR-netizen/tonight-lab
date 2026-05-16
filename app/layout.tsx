@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Serif_SC } from "next/font/google";
+import { Fraunces, Inter, Noto_Serif_SC } from "next/font/google";
 import { Toaster } from "sonner";
+
+import { MotionProviders } from "@/components/providers/MotionProviders";
+
 import "./globals.css";
 
 const inter = Inter({
@@ -19,6 +22,15 @@ const notoSerifSC = Noto_Serif_SC({
   preload: false,
 });
 
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "900"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-display",
+  preload: true,
+});
+
 export const metadata: Metadata = {
   title: "AI Feed Cards Demo",
   description: "Douyin-style just-in-time AI feed cards mock demo.",
@@ -30,9 +42,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN" className={`${inter.variable} ${notoSerifSC.variable}`}>
+    <html
+      lang="zh-CN"
+      className={`${inter.variable} ${notoSerifSC.variable} ${fraunces.variable}`}
+    >
       <body>
-        {children}
+        <MotionProviders>{children}</MotionProviders>
         <Toaster position="top-center" theme="light" />
       </body>
     </html>

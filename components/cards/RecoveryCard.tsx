@@ -40,14 +40,25 @@ export function RecoveryCard({ item, onUpdate }: RecoveryCardProps) {
       icon={<Moon className="h-4 w-4" />}
       item={item}
       tone="recovery"
+      detailHref="/cards/recovery"
       onUpdate={onUpdate}
     >
-      <div className="mb-3 flex items-center justify-between rounded-lg border border-violet-200 bg-violet-50/70 p-3">
+      <div className="mb-3">
+        <ActionChips
+          actions={item.primaryActions}
+          loadingActionId={loadingActionId}
+          selectedActionId={item.selectedActionId}
+          tone="recovery"
+          onActionClick={handleAction}
+        />
+      </div>
+
+      <div className="mb-3 flex items-center justify-between rounded-2xl border border-violet-200 bg-[linear-gradient(135deg,rgba(245,243,255,0.96),white)] p-3 shadow-soft">
         <div className="flex items-center gap-2 text-sm text-violet-800">
           <Waves className="h-4 w-4 text-violet-600" />
           总时长
         </div>
-        <p className="text-xl font-semibold tabular-nums text-violet-900">
+        <p className="text-2xl font-semibold tabular-nums leading-none text-violet-950">
           {item.totalDuration}
         </p>
       </div>
@@ -63,29 +74,23 @@ export function RecoveryCard({ item, onUpdate }: RecoveryCardProps) {
           {item.steps.map((step) => (
             <div
               key={step.id}
-              className="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50/60 p-3"
+              className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-slate-50/70 p-3 shadow-soft"
             >
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-violet-200 bg-white text-violet-600 shadow-soft">
+                <CheckCircle2 className="h-4 w-4" />
+              </span>
               <div className="min-w-0">
                 <p className="text-sm font-medium text-slate-900">{step.text}</p>
                 {step.duration ? (
-                  <p className="mt-0.5 text-xs text-slate-500">{step.duration}</p>
+                  <p className="mt-0.5 text-xs font-medium text-violet-700">
+                    {step.duration}
+                  </p>
                 ) : null}
               </div>
             </div>
           ))}
         </motion.div>
       </AnimatePresence>
-
-      <div className="mt-4">
-        <ActionChips
-          actions={item.primaryActions}
-          loadingActionId={loadingActionId}
-          selectedActionId={item.selectedActionId}
-          tone="recovery"
-          onActionClick={handleAction}
-        />
-      </div>
     </AiCardShell>
   );
 }

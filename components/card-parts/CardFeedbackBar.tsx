@@ -19,7 +19,7 @@ export function CardFeedbackBar({
   onToggleExpand,
 }: CardFeedbackBarProps) {
   return (
-    <div className="mt-4 flex items-center justify-between gap-2 border-t border-slate-200 pt-3">
+    <div className="mt-4 flex items-center justify-between gap-2 border-t border-slate-200/80 pt-3">
       <div className="flex items-center gap-2">
         <Button
           aria-label="这个推荐准"
@@ -46,7 +46,7 @@ export function CardFeedbackBar({
       </div>
       <Button
         aria-label={expanded ? "收起详情" : "展开详情"}
-        className="h-8 rounded-full px-3 text-xs"
+        className="h-8 rounded-full px-3 text-xs font-semibold text-slate-600 hover:text-slate-950"
         type="button"
         size="sm"
         variant="ghost"
