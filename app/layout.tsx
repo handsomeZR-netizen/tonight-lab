@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter, Noto_Serif_SC } from "next/font/google";
 import { Toaster } from "sonner";
@@ -103,6 +104,7 @@ export default function RootLayout({
       <body>
         <MotionProviders>{children}</MotionProviders>
         <Toaster position="top-center" theme="light" />
+        <Analytics />
       </body>
     </html>
   );

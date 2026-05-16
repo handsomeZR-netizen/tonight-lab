@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { HeroSection } from "@/components/landing/HeroSection";
+import { JsonLd } from "@/components/seo/JsonLd";
 
 const scenarios = [
   {
@@ -75,6 +76,24 @@ const flow = [
 export default function Page() {
   return (
     <main className="min-h-screen overflow-hidden bg-[hsl(44_38%_97%)] text-slate-950">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Tonight Lab",
+          description:
+            "一个把「今晚到底做什么」包装成 AI 场景叙事的沉浸式信息流 demo。",
+          applicationCategory: "MultimediaApplication",
+          operatingSystem: "Web",
+          inLanguage: "zh-CN",
+          creator: { "@type": "Organization", name: "Tonight Lab" },
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "USD",
+          },
+        }}
+      />
       <HeroSection />
 
       <section
