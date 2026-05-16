@@ -11,10 +11,13 @@ import { CardFeedbackBar } from "@/components/card-parts/CardFeedbackBar";
 import { ExpandablePanel } from "@/components/card-parts/ExpandablePanel";
 import { SceneBadge } from "@/components/card-parts/SceneBadge";
 import { Button } from "@/components/ui/button";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { cn } from "@/lib/cn";
 import type { AiCardBase } from "@/lib/types";
 
 export type AiCardTone = "food" | "trip" | "sports" | "recovery";
+
+export const SAVED_CARDS_STORAGE_KEY = "tonightlab:saved-cards:v1";
 
 type AiCardShellProps<TItem extends AiCardBase> = {
   item: TItem;
@@ -76,12 +79,27 @@ export function AiCardShell<TItem extends AiCardBase>({
   detailLabel = "打开完整玩法",
   onUpdate,
 }: AiCardShellProps<TItem>) {
-  const isSaved = item.isSaved === true;
+  const [savedIds, setSavedIds] = useLocalStorageState<string[]>(
+    SAVED_CARDS_STORAGE_KEY,
+    [],
+  );
+  const persistedSaved = savedIds.includes(item.id);
+  const isSaved = persistedSaved || item.isSaved === true;
   const expanded = item.expanded === true;
   const dismissed = item.isDismissed === true;
+  const coverTransitionName = `card-${tone}-cover`;
 
   function handleSave() {
     const nextSaved = !isSaved;
+    setSavedIds((prev) => {
+      const set = new Set(prev);
+      if (nextSaved) {
+        set.add(item.id);
+      } else {
+        set.delete(item.id);
+      }
+      return Array.from(set);
+    });
     onUpdate(patchItem(item, { isSaved: nextSaved }));
     toast(nextSaved ? "已收藏，之后可以在“我”里找到" : "已取消收藏");
   }
@@ -105,13 +123,18 @@ export function AiCardShell<TItem extends AiCardBase>({
       >
         {item.visual ? (
           <header className="relative min-h-[218px] overflow-hidden rounded-b-[26px] bg-slate-950">
-            <Image
-              alt={item.visual.alt}
-              className="h-full w-full object-cover"
-              fill
-              sizes="(max-width: 640px) 342px, 342px"
-              src={item.visual.src}
-            />
+            <div
+              className="absolute inset-0"
+              style={{ viewTransitionName: coverTransitionName }}
+            >
+              <Image
+                alt={item.visual.alt}
+                className="h-full w-full object-cover"
+                fill
+                sizes="(max-width: 640px) 342px, 342px"
+                src={item.visual.src}
+              />
+            </div>
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.28)_42%,rgba(2,6,23,0.84)_100%)]" />
             <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950/42 to-transparent" />
 
