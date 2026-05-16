@@ -1,13 +1,15 @@
+import { DemoControlPanel } from "@/components/demo/DemoControlPanel";
+import { FeedViewport } from "@/components/feed/FeedViewport";
+import { MobileFrame } from "@/components/feed/MobileFrame";
+
 export default function Page() {
   return (
-    <main className="flex min-h-screen items-center justify-center px-4 py-8">
-      <div className="text-center">
-        <p className="text-sm uppercase tracking-[0.24em] text-cyan-200">
-          AI Feed Cards
-        </p>
-        <h1 className="mt-4 text-3xl font-semibold text-white">
-          Demo scaffold ready
-        </h1>
+    <main className="min-h-screen overflow-hidden px-5 py-8">
+      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-6xl items-center justify-center gap-10">
+        <MobileFrame>
+          <FeedViewport />
+        </MobileFrame>
+        <DemoControlPanel />
       </div>
     </main>
   );
