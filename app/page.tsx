@@ -1,5 +1,3 @@
-"use client";
-
 import {
   ArrowDown,
   BellRing,
@@ -18,14 +16,8 @@ import {
   WalletCards,
 } from "lucide-react";
 import Image from "next/image";
-import { useRef } from "react";
 
-import { FeedViewport } from "@/components/feed/FeedViewport";
-import { MobileFrame } from "@/components/feed/MobileFrame";
-import { PageScrollHint } from "@/components/feed/PageScrollHint";
-import { PhoneShell } from "@/components/feed/PhoneShell";
-import { PhoneSpotlight } from "@/components/feed/PhoneSpotlight";
-import { PhoneSwipeIndicator } from "@/components/feed/PhoneSwipeIndicator";
+import { HeroPhonePreview } from "@/components/landing/HeroPhonePreview";
 
 const productPoints = [
   { label: "不打断浏览", value: "原地给下一步", icon: Layers3 },
@@ -90,8 +82,6 @@ const flow = [
 ];
 
 export default function Page() {
-  const phoneRef = useRef<HTMLDivElement>(null);
-
   return (
     <main className="min-h-screen overflow-hidden bg-[hsl(44_38%_97%)] text-slate-950">
       <section className="relative border-b border-slate-200/70 px-4 pb-12 pt-5 sm:px-6 lg:px-8">
@@ -156,21 +146,8 @@ export default function Page() {
             </div>
           </div>
 
-          <div
-            id="experience"
-            ref={phoneRef}
-            className="flex justify-center lg:justify-end"
-          >
-            <PhoneShell>
-              <MobileFrame>
-                <FeedViewport />
-              </MobileFrame>
-              <PhoneSwipeIndicator targetRef={phoneRef} />
-            </PhoneShell>
-          </div>
+          <HeroPhonePreview />
         </div>
-        <PhoneSpotlight targetRef={phoneRef} />
-        <PageScrollHint />
       </section>
 
       <section
