@@ -8,9 +8,9 @@ import {
 } from "lucide-react";
 
 const metrics = [
-  { label: "Mock items", value: "8" },
+  { label: "Mock items", value: "7" },
   { label: "Snap mode", value: "Full" },
-  { label: "AI cards", value: "Live" },
+  { label: "AI cards", value: "4" },
 ];
 
 const controls = [
@@ -25,10 +25,10 @@ export function DemoControlPanel() {
       <div className="mb-6">
         <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1 text-xs font-medium text-cyan-100">
           <Bot size={14} />
-          Pure mock environment
+          Mock AI environment
         </div>
         <h1 className="mt-4 text-3xl font-semibold leading-tight">
-          Douyin-style AI feed shell
+          抖音信息流 AI 卡片 Demo
         </h1>
       </div>
 
@@ -69,11 +69,10 @@ export function DemoControlPanel() {
       <div className="mt-5 rounded-lg border border-cyan-300/20 bg-cyan-300/[0.07] p-4">
         <div className="flex items-center gap-2 text-sm font-semibold text-cyan-100">
           <Layers3 size={17} />
-          Renderer pipeline
+          生成说明
         </div>
         <p className="mt-2 text-sm leading-6 text-white/62">
-          Feed state, card updates, and snap playback are grouped in one mock
-          surface.
+          页面文案呈现为 AI 生成和 AI 重排，但当前全部由本地 mock 数据驱动，方便后续替换为 AI SDK structured output。
         </p>
       </div>
     </aside>

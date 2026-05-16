@@ -1,98 +1,91 @@
 "use client";
 
-import { BatteryMedium, Moon, Wind } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { CheckCircle2, Moon, Waves } from "lucide-react";
+import { useState } from "react";
 
 import { ActionChips } from "@/components/card-parts/ActionChips";
 import { AiReason } from "@/components/card-parts/AiReason";
-import { AiCardShell, type AiFeedCardBase, type ChipOption } from "@/components/cards/AiCardShell";
-import { chipsOrFallback, stringListField, textField } from "@/components/cards/card-data";
+import { AiCardShell } from "@/components/cards/AiCardShell";
+import { transformRecoveryCard } from "@/lib/card-transforms";
+import type { ActionChip, RecoveryCardData } from "@/lib/types";
 
-type RecoveryCardProps<TItem extends AiFeedCardBase> = {
-  item: TItem;
-  onUpdate: (updatedItem: TItem) => void;
+type RecoveryCardProps = {
+  item: RecoveryCardData;
+  onUpdate: (updatedItem: RecoveryCardData) => void;
 };
 
-const fallbackChips: ChipOption[] = [
-  { id: "five-min", label: "5分钟版" },
-  { id: "stretch", label: "拉伸一下" },
-  { id: "sleep", label: "准备睡觉" },
-];
+export function RecoveryCard({ item, onUpdate }: RecoveryCardProps) {
+  const [loadingActionId, setLoadingActionId] = useState<string>();
 
-export function RecoveryCard<TItem extends AiFeedCardBase>({
-  item,
-  onUpdate,
-}: RecoveryCardProps<TItem>) {
-  const focus = textField(item, ["focus", "recovery", "name"], "低刺激恢复");
-  const intensity = textField(item, ["intensity", "level"], "轻");
-  const duration = textField(item, ["duration", "time"], "12分钟");
-  const breathing = textField(item, ["breathing", "pace"], "4-6呼吸");
-  const steps = stringListField(item, ["steps", "plan", "routine"]).slice(0, 4);
+  async function handleAction(action: ActionChip) {
+    if (loadingActionId) {
+      return;
+    }
+
+    setLoadingActionId(action.id);
+    onUpdate({ ...item, selectedActionId: action.id });
+    await wait(520);
+    onUpdate(transformRecoveryCard(item, action.id));
+    setLoadingActionId(undefined);
+  }
 
   return (
     <AiCardShell
-      details={<AiReason reason={item.reason} />}
+      expandedContent={<AiReason reason={`状态：${stateCopy[item.energyState]}。这不是医疗建议，只是一个低刺激、短时长的恢复提示。`} />}
       icon={<Moon className="h-4 w-4" />}
       item={item}
       tone="recovery"
       onUpdate={onUpdate}
     >
-      <div className="rounded-lg border border-slate-100/10 bg-black/25 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-sm text-slate-200/60">今晚建议</p>
-            <p className="mt-1 text-2xl font-semibold text-slate-50">{focus}</p>
-          </div>
-          <div className="rounded-md border border-slate-200/10 bg-slate-200/10 px-3 py-2 text-right">
-            <BatteryMedium className="ml-auto h-4 w-4 text-slate-200" />
-            <p className="mt-1 text-sm text-slate-100">{intensity}</p>
-          </div>
+      <div className="mb-3 flex items-center justify-between rounded-lg border border-violet-100/12 bg-white/8 p-3">
+        <div className="flex items-center gap-2 text-sm text-white/72">
+          <Waves className="h-4 w-4 text-violet-100" />
+          总时长
         </div>
-
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          <Metric label="时长" value={duration} />
-          <Metric label="节奏" value={breathing} />
-        </div>
-
-        <div className="mt-4 space-y-2">
-          {(steps.length > 0 ? steps : ["关掉强光", "颈肩放松", "慢呼吸", "停止刷屏"]).map(
-            (step, index) => (
-              <div
-                key={step}
-                className="flex items-center gap-3 rounded-md border border-white/10 bg-white/10 px-3 py-2 text-sm text-slate-100/108"
-              >
-                <span className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-200/10 text-xs text-slate-100">
-                  {index + 1}
-                </span>
-                {step}
-              </div>
-            ),
-          )}
-        </div>
+        <p className="text-xl font-semibold text-violet-50">{item.totalDuration}</p>
       </div>
+
+      <AnimatePresence mode="popLayout">
+        <motion.div
+          key={item.steps.map((step) => step.id).join("-")}
+          className="grid gap-2"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+        >
+          {item.steps.map((step) => (
+            <div key={step.id} className="flex items-start gap-3 rounded-lg border border-white/10 bg-black/20 p-3">
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-violet-100" />
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-white">{step.text}</p>
+                {step.duration ? <p className="mt-0.5 text-xs text-white/54">{step.duration}</p> : null}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
 
       <div className="mt-4">
         <ActionChips
-          chips={chipsOrFallback(item, fallbackChips)}
-          item={item}
+          actions={item.primaryActions}
+          loadingActionId={loadingActionId}
+          selectedActionId={item.selectedActionId}
           tone="recovery"
-          onUpdate={onUpdate}
+          onActionClick={handleAction}
         />
       </div>
     </AiCardShell>
   );
 }
 
-type MetricProps = {
-  label: string;
-  value: string;
+const stateCopy: Record<RecoveryCardData["energyState"], string> = {
+  anxious: "焦虑",
+  flat: "空掉",
+  overstimulated: "刺激过载",
+  tired: "脑力疲惫",
 };
 
-function Metric({ label, value }: MetricProps) {
-  return (
-    <div className="rounded-md border border-white/10 bg-white/10 p-3">
-      <Wind className="mb-2 h-4 w-4 text-slate-300" />
-      <p className="text-xs text-slate-300/60">{label}</p>
-      <p className="text-sm font-medium text-slate-50">{value}</p>
-    </div>
-  );
+function wait(ms: number) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
 }

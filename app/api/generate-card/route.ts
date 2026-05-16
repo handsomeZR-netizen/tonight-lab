@@ -3,91 +3,73 @@ import { NextResponse } from "next/server";
 import { transformCard } from "@/lib/card-transforms";
 import { mockAiCards } from "@/lib/mock-feed";
 import type {
-  ActionChipVariant,
-  AiCardType,
   AiFeedCard,
+  FeedItemType,
   GenerateCardRequest,
   GenerateCardResponse,
 } from "@/lib/types";
 
-const cardTypes: readonly AiCardType[] = ["food", "micro-trip", "sports", "recovery"];
-const actionVariants: readonly ActionChipVariant[] = [
-  "spicy",
-  "no-delivery",
-  "alone",
-  "low-calorie",
-  "budget-30",
-  "less-walk",
-  "photo-friendly",
-  "solo",
-  "date",
-  "low-budget",
-  "home",
-  "draw",
-  "away",
-  "player-focus",
-  "one-line",
-  "anxious",
-  "lying-down",
-  "five-min",
-  "no-advice",
-  "sleep",
-];
-
 export async function POST(request: Request): Promise<NextResponse<GenerateCardResponse>> {
   const body = await readRequestBody(request);
+  const currentCard = body.currentCard;
+  const actionId = body.action?.id;
 
-  if (body.currentCard && body.action) {
+  if (currentCard && actionId) {
     return NextResponse.json({
-      card: transformCard(body.currentCard, body.action),
+      card: transformCard(currentCard, actionId),
       source: "mock",
     });
   }
 
-  const card = getFirstMatchingCard(body.cardType);
-
-  return NextResponse.json({ card, source: "mock" });
+  return NextResponse.json({
+    card: getFirstMatchingCard(body.cardType),
+    source: "mock",
+  });
 }
 
 async function readRequestBody(request: Request): Promise<GenerateCardRequest> {
   try {
     const value: unknown = await request.json();
-    return parseGenerateCardRequest(value);
+    return isRecord(value) ? parseGenerateCardRequest(value) : {};
   } catch {
     return {};
   }
 }
 
-function parseGenerateCardRequest(value: unknown): GenerateCardRequest {
-  if (!isRecord(value)) {
-    return {};
-  }
-
-  const cardType = isAiCardType(value.cardType) ? value.cardType : undefined;
-  const action = isActionVariant(value.action) ? value.action : undefined;
-  const currentCard = isAiFeedCard(value.currentCard) ? value.currentCard : undefined;
-
-  return { cardType, action, currentCard };
+function parseGenerateCardRequest(value: Record<string, unknown>): GenerateCardRequest {
+  return {
+    cardType: isFeedItemType(value.cardType) ? value.cardType : undefined,
+    action: isRecord(value.action) && typeof value.action.id === "string"
+      ? {
+          id: value.action.id,
+          label: typeof value.action.label === "string" ? value.action.label : value.action.id,
+          intent: "refine",
+        }
+      : undefined,
+    currentCard: isAiFeedCard(value.currentCard) ? value.currentCard : undefined,
+  };
 }
 
-function getFirstMatchingCard(cardType: AiCardType | undefined): AiFeedCard {
-  if (!cardType) {
+function getFirstMatchingCard(cardType: FeedItemType | undefined): AiFeedCard {
+  if (!cardType || cardType === "video") {
     return mockAiCards[0];
   }
 
   return mockAiCards.find((card) => card.type === cardType) ?? mockAiCards[0];
 }
 
-function isAiCardType(value: unknown): value is AiCardType {
-  return typeof value === "string" && cardTypes.includes(value as AiCardType);
-}
-
-function isActionVariant(value: unknown): value is ActionChipVariant {
-  return typeof value === "string" && actionVariants.includes(value as ActionChipVariant);
+function isFeedItemType(value: unknown): value is FeedItemType {
+  return (
+    value === "video" ||
+    value === "food_decision" ||
+    value === "micro_trip" ||
+    value === "sports_pre_match" ||
+    value === "recovery"
+  );
 }
 
 function isAiFeedCard(value: unknown): value is AiFeedCard {
-  return isRecord(value) && isAiCardType(value.type);
+  return isRecord(value) && isFeedItemType(value.type) && value.type !== "video";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

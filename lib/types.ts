@@ -1,178 +1,124 @@
-export type FeedItemType = "video" | "food" | "micro-trip" | "sports" | "recovery";
-
-export type AiCardType = Exclude<FeedItemType, "video">;
-
-export type ActionChipVariant =
-  | FoodActionVariant
-  | MicroTripActionVariant
-  | SportsActionVariant
-  | RecoveryActionVariant;
-
-export type FoodActionVariant =
-  | "spicy"
-  | "no-delivery"
-  | "alone"
-  | "low-calorie"
-  | "budget-30";
-
-export type MicroTripActionVariant =
-  | "less-walk"
-  | "photo-friendly"
-  | "solo"
-  | "date"
-  | "low-budget";
-
-export type SportsActionVariant =
-  | "home"
-  | "draw"
-  | "away"
-  | "player-focus"
-  | "one-line";
-
-export type RecoveryActionVariant =
-  | "anxious"
-  | "lying-down"
-  | "five-min"
-  | "no-advice"
-  | "sleep";
+export type FeedItemType =
+  | "video"
+  | "food_decision"
+  | "micro_trip"
+  | "sports_pre_match"
+  | "recovery";
 
 export interface FeedItemBase {
   id: string;
   type: FeedItemType;
-  createdAt: string;
-}
-
-export interface VideoAuthor {
-  id: string;
-  handle: string;
-  displayName: string;
-  avatarColor: string;
-}
-
-export interface VideoStats {
-  likes: string;
-  comments: string;
-  shares: string;
+  title: string;
+  author?: string;
+  createdAt?: string;
 }
 
 export interface VideoFeedItem extends FeedItemBase {
   type: "video";
-  author: VideoAuthor;
+  author: string;
   caption: string;
   soundtrack: string;
-  posterColor: string;
+  posterTone: "food" | "trip" | "sports";
   tags: string[];
-  stats: VideoStats;
+  stats: {
+    likes: string;
+    comments: string;
+    shares: string;
+  };
 }
 
-export interface ActionChip<TVariant extends string = ActionChipVariant> {
+export interface ActionChip {
   id: string;
   label: string;
-  variant: TVariant;
+  intent: "refine" | "feedback" | "predict" | "expand" | "negative" | "save";
 }
 
-export interface UserContext {
-  location: string;
-  localTime: string;
-  weather: string;
-  mood: "curious" | "hungry" | "restless" | "focused" | "tired";
-  budgetCny?: number;
-  companions: "alone" | "friend" | "date" | "team";
-  dietaryPreference?: string;
-  mobilityPreference?: "normal" | "less-walk";
-}
-
-export interface AiCardBase<TType extends AiCardType, TChip extends string>
-  extends FeedItemBase {
-  type: TType;
-  eyebrow: string;
+export interface AiCardBase extends FeedItemBase {
+  aiLabel: string;
+  sceneLabel: string;
   headline: string;
   personalReason: string;
-  confidenceLabel: string;
-  selectedIntent: TChip | "default";
-  userContext: UserContext;
-  actionChips: ActionChip<TChip>[];
+  primaryActions: ActionChip[];
+  secondaryActions?: ActionChip[];
+  isSaved?: boolean;
+  isDismissed?: boolean;
+  expanded?: boolean;
+  selectedActionId?: string;
+  feedbackStatus?: "accurate" | "inaccurate";
+  feedbackMessage?: string;
 }
 
 export interface FoodOption {
+  id: string;
   name: string;
-  cuisine: string;
-  priceCny: number;
-  distanceMinutes: number;
-  deliveryAvailable: boolean;
-  caloriesLabel: string;
+  price: string;
+  tags: string[];
   reason: string;
+  fitMoment: string;
 }
 
-export interface FoodDecisionCardData
-  extends AiCardBase<"food", FoodActionVariant> {
-  mealWindow: "breakfast" | "lunch" | "dinner" | "late-night";
-  core: {
-    recommendation: FoodOption;
-    backup: FoodOption;
-    avoid: string;
-    orderTip: string;
-  };
+export interface FoodDecisionCardData extends AiCardBase {
+  type: "food_decision";
+  weather: string;
+  budget: string;
+  options: FoodOption[];
+  selectedIntent?: string;
 }
 
-export interface MicroTripStop {
+export interface TripStop {
+  id: string;
+  time: string;
   title: string;
-  durationMinutes: number;
-  note: string;
+  description: string;
+  tags: string[];
 }
 
-export interface MicroTripCardData
-  extends AiCardBase<"micro-trip", MicroTripActionVariant> {
-  tripWindow: string;
-  core: {
-    theme: string;
-    totalCostCny: number;
-    walkingMinutes: number;
-    route: MicroTripStop[];
-    bestMoment: string;
-  };
+export interface MicroTripCardData extends AiCardBase {
+  type: "micro_trip";
+  city: string;
+  duration: string;
+  mood: string;
+  stops: TripStop[];
+  selectedIntent?: string;
 }
 
-export interface SportsTeam {
-  name: string;
-  form: string;
+export interface MatchInsight {
+  id: string;
+  title: string;
+  detail: string;
 }
 
-export interface SportsSignal {
-  label: string;
-  value: string;
+export interface PredictionStats {
+  homeWin: number;
+  draw: number;
+  awayWin: number;
 }
 
-export interface SportsPreMatchCardData
-  extends AiCardBase<"sports", SportsActionVariant> {
-  match: {
-    league: string;
-    startsAt: string;
-    home: SportsTeam;
-    away: SportsTeam;
-  };
-  core: {
-    angle: string;
-    lean: "home" | "draw" | "away" | "watch";
-    oneLine: string;
-    signals: SportsSignal[];
-  };
+export interface SportsPreMatchCardData extends AiCardBase {
+  type: "sports_pre_match";
+  homeTeam: string;
+  awayTeam: string;
+  startInMinutes: number;
+  followedPlayer: string;
+  keyMatchup: string;
+  insights: MatchInsight[];
+  predictionStats?: PredictionStats;
+  userPrediction?: "home" | "draw" | "away";
+  selectedIntent?: string;
 }
 
 export interface RecoveryStep {
-  title: string;
-  durationMinutes: number;
-  instruction: string;
+  id: string;
+  text: string;
+  duration?: string;
 }
 
-export interface RecoveryCardData
-  extends AiCardBase<"recovery", RecoveryActionVariant> {
-  recoveryWindow: string;
-  core: {
-    tone: "calm" | "practical" | "minimal" | "sleepy";
-    steps: RecoveryStep[];
-    closingCue: string;
-  };
+export interface RecoveryCardData extends AiCardBase {
+  type: "recovery";
+  energyState: "tired" | "anxious" | "flat" | "overstimulated";
+  totalDuration: string;
+  steps: RecoveryStep[];
+  selectedIntent?: string;
 }
 
 export type AiFeedCard =
@@ -183,10 +129,22 @@ export type AiFeedCard =
 
 export type FeedItem = VideoFeedItem | AiFeedCard;
 
+export interface UserContext {
+  currentTime: string;
+  city: string;
+  weather: string;
+  mood?: string;
+  recentPreferences: string[];
+  budget?: string;
+  followedTeams?: string[];
+  followedPlayers?: string[];
+}
+
 export interface GenerateCardRequest {
-  cardType?: AiCardType;
+  cardType?: FeedItemType;
+  userContext?: UserContext;
+  action?: ActionChip;
   currentCard?: AiFeedCard;
-  action?: ActionChipVariant;
 }
 
 export interface GenerateCardResponse {

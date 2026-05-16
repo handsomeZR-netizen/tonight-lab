@@ -1,56 +1,44 @@
-import type {
-  FoodActionVariant,
-  MicroTripActionVariant,
-  RecoveryActionVariant,
-  SportsActionVariant,
-} from "./types";
+import type { ActionChip, UserContext } from "@/lib/types";
 
-export const FOOD_ACTION_CHIPS: ReadonlyArray<{
-  id: string;
-  label: string;
-  variant: FoodActionVariant;
-}> = [
-  { id: "food-spicy", label: "Spicy", variant: "spicy" },
-  { id: "food-no-delivery", label: "No delivery", variant: "no-delivery" },
-  { id: "food-alone", label: "Eating alone", variant: "alone" },
-  { id: "food-low-calorie", label: "Low calorie", variant: "low-calorie" },
-  { id: "food-budget-30", label: "Budget 30", variant: "budget-30" },
+export const mockUserContext: UserContext = {
+  currentTime: "2026-05-16T19:12:00+08:00",
+  city: "上海",
+  weather: "22°C / 闷 / 无雨",
+  mood: "下班后有点累",
+  recentPreferences: ["微辣", "米饭类", "低体力路线", "足球"],
+  budget: "¥40 内",
+  followedTeams: ["曼城", "阿森纳"],
+  followedPlayers: ["福登", "萨卡"],
+};
+
+export const foodActions: ActionChip[] = [
+  { id: "spicy", label: "想吃辣", intent: "refine" },
+  { id: "no-delivery", label: "不要外卖", intent: "refine" },
+  { id: "alone", label: "一个人吃", intent: "refine" },
+  { id: "low-calorie", label: "换低卡", intent: "refine" },
+  { id: "budget-30", label: "预算 30 内", intent: "refine" },
 ];
 
-export const MICRO_TRIP_ACTION_CHIPS: ReadonlyArray<{
-  id: string;
-  label: string;
-  variant: MicroTripActionVariant;
-}> = [
-  { id: "trip-less-walk", label: "Less walking", variant: "less-walk" },
-  { id: "trip-photo-friendly", label: "Photo-friendly", variant: "photo-friendly" },
-  { id: "trip-solo", label: "Solo", variant: "solo" },
-  { id: "trip-date", label: "Date", variant: "date" },
-  { id: "trip-low-budget", label: "Low budget", variant: "low-budget" },
+export const tripActions: ActionChip[] = [
+  { id: "less-walk", label: "少走路", intent: "refine" },
+  { id: "photo-friendly", label: "适合拍照", intent: "refine" },
+  { id: "solo", label: "适合一个人", intent: "refine" },
+  { id: "date", label: "适合约会", intent: "refine" },
+  { id: "low-budget", label: "预算低一点", intent: "refine" },
 ];
 
-export const SPORTS_ACTION_CHIPS: ReadonlyArray<{
-  id: string;
-  label: string;
-  variant: SportsActionVariant;
-}> = [
-  { id: "sports-home", label: "Home win", variant: "home" },
-  { id: "sports-draw", label: "Draw", variant: "draw" },
-  { id: "sports-away", label: "Away win", variant: "away" },
-  { id: "sports-player-focus", label: "Player focus", variant: "player-focus" },
-  { id: "sports-one-line", label: "One-line", variant: "one-line" },
+export const sportsActions: ActionChip[] = [
+  { id: "home", label: "主胜", intent: "predict" },
+  { id: "draw", label: "平局", intent: "predict" },
+  { id: "away", label: "客胜", intent: "predict" },
+  { id: "player-focus", label: "只看我关注的球员", intent: "refine" },
+  { id: "one-line", label: "给我一句话版", intent: "refine" },
 ];
 
-export const RECOVERY_ACTION_CHIPS: ReadonlyArray<{
-  id: string;
-  label: string;
-  variant: RecoveryActionVariant;
-}> = [
-  { id: "recovery-anxious", label: "Anxious", variant: "anxious" },
-  { id: "recovery-lying-down", label: "Lying down", variant: "lying-down" },
-  { id: "recovery-five-min", label: "Five minutes", variant: "five-min" },
-  { id: "recovery-no-advice", label: "No advice", variant: "no-advice" },
-  { id: "recovery-sleep", label: "Sleep", variant: "sleep" },
+export const recoveryActions: ActionChip[] = [
+  { id: "anxious", label: "我现在焦虑", intent: "refine" },
+  { id: "lying-down", label: "我只想躺着", intent: "refine" },
+  { id: "five-min", label: "给我 5 分钟版", intent: "refine" },
+  { id: "no-advice", label: "不想听道理", intent: "refine" },
+  { id: "sleep", label: "睡前模式", intent: "refine" },
 ];
-
-export const MOCK_TIMESTAMP = "2026-05-16T12:00:00+08:00";
