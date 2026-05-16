@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
 import { cn } from "@/lib/cn";
@@ -15,10 +15,17 @@ type ActionChipsProps = {
 };
 
 const toneClass = {
-  food: "border-orange-200/25 bg-orange-200/15 text-orange-50 hover:bg-orange-200/25",
-  trip: "border-sky-200/20 bg-sky-200/14 text-sky-50 hover:bg-sky-200/24",
-  sports: "border-lime-200/25 bg-lime-200/12 text-lime-50 hover:bg-lime-200/22",
-  recovery: "border-violet-200/20 bg-violet-100/10 text-violet-50 hover:bg-violet-100/18",
+  food: "border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100",
+  trip: "border-sky-200 bg-sky-50 text-sky-800 hover:bg-sky-100",
+  sports: "border-emerald-200 bg-emerald-50 text-emerald-800 hover:bg-emerald-100",
+  recovery: "border-violet-200 bg-violet-50 text-violet-800 hover:bg-violet-100",
+} satisfies Record<ActionChipsProps["tone"], string>;
+
+const toneRing = {
+  food: "ring-amber-400/60",
+  trip: "ring-sky-400/60",
+  sports: "ring-emerald-400/60",
+  recovery: "ring-violet-400/60",
 } satisfies Record<ActionChipsProps["tone"], string>;
 
 export function ActionChips({
@@ -38,27 +45,17 @@ export function ActionChips({
           <motion.button
             key={action.id}
             className={cn(
-              "relative min-h-9 shrink-0 overflow-hidden rounded-full border px-3.5 py-2 text-sm font-medium shadow-sm backdrop-blur-md transition",
+              "relative min-h-9 shrink-0 rounded-full border px-3.5 py-1.5 text-sm font-medium shadow-soft transition",
               toneClass[tone],
-              selected && "ring-2 ring-white/40",
-              loadingActionId && !loading && "opacity-55",
+              selected && cn("ring-2 ring-offset-1 ring-offset-white", toneRing[tone]),
+              loading && "animate-pulse",
+              loadingActionId && !loading && "opacity-50",
             )}
             type="button"
             whileTap={{ scale: 0.96 }}
             onClick={() => onActionClick(action)}
           >
-            <AnimatePresence>
-              {loading ? (
-                <motion.span
-                  className="absolute inset-0 bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.24),transparent)]"
-                  initial={{ x: "-100%" }}
-                  animate={{ x: "100%" }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.48, repeat: Infinity, ease: "linear" }}
-                />
-              ) : null}
-            </AnimatePresence>
-            <span className="relative z-10 flex items-center gap-1.5">
+            <span className="flex items-center gap-1.5">
               {loading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null}
               {action.label}
             </span>

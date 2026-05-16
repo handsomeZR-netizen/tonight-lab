@@ -2,10 +2,12 @@ import {
   Heart,
   MessageCircle,
   Music2,
+  Play,
   Share2,
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
+import Image from "next/image";
 
 import { cn } from "@/lib/cn";
 import type { VideoFeedItem } from "@/lib/types";
@@ -14,47 +16,71 @@ type VideoPlaceholderItemProps = {
   item: VideoFeedItem;
 };
 
-const toneBackground: Record<VideoFeedItem["posterTone"], string> = {
-  food: "bg-[radial-gradient(circle_at_30%_18%,rgba(251,146,60,0.32),transparent_32%),radial-gradient(circle_at_78%_18%,rgba(244,63,94,0.2),transparent_34%),linear-gradient(145deg,#24100b,#050507_58%,#130c0c)]",
-  trip: "bg-[radial-gradient(circle_at_30%_18%,rgba(56,189,248,0.26),transparent_32%),radial-gradient(circle_at_78%_18%,rgba(250,204,21,0.16),transparent_34%),linear-gradient(145deg,#0b1631,#050507_58%,#1a1023)]",
-  sports:
-    "bg-[radial-gradient(circle_at_30%_18%,rgba(132,204,22,0.26),transparent_32%),radial-gradient(circle_at_78%_18%,rgba(34,211,238,0.14),transparent_34%),linear-gradient(145deg,#07170d,#050507_58%,#07121d)]",
+const toneAccent: Record<VideoFeedItem["posterTone"], string> = {
+  food: "border-amber-100/40 bg-amber-50/15 text-amber-50",
+  trip: "border-sky-100/40 bg-sky-50/15 text-sky-50",
+  sports: "border-emerald-100/40 bg-emerald-50/15 text-emerald-50",
+};
+
+const toneLabel: Record<VideoFeedItem["posterTone"], string> = {
+  food: "深夜热榜",
+  trip: "城市灵感",
+  sports: "赛前看点",
 };
 
 export function VideoPlaceholderItem({ item }: VideoPlaceholderItemProps) {
   return (
-    <article className="relative flex h-full w-full snap-start snap-always flex-col justify-end overflow-hidden bg-[#08080b] px-5 pb-24 pt-16 text-white">
-      <div className={cn("absolute inset-0", toneBackground[item.posterTone])} />
-      <div className="absolute inset-0 opacity-[0.16] [background-image:linear-gradient(rgba(255,255,255,0.18)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:28px_28px]" />
-      <div className="absolute left-1/2 top-[42%] flex h-44 w-44 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 backdrop-blur-md">
-        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white text-black shadow-[0_0_42px_rgba(255,255,255,0.34)]">
-          <Music2 fill="currentColor" size={34} />
+    <article className="relative flex h-full w-full snap-start snap-always flex-col justify-end overflow-hidden bg-slate-950 px-5 pb-24 pt-16 text-white">
+      <Image
+        alt={item.poster.alt}
+        className="absolute inset-0 h-full w-full object-cover"
+        fill
+        priority={item.id === "video-001"}
+        sizes="390px"
+        src={item.poster.src}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.18)_0%,rgba(2,6,23,0.08)_35%,rgba(2,6,23,0.76)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent" />
+      <div
+        className="absolute left-1/2 top-[40%] flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 shadow-[0_16px_42px_rgba(15,23,42,0.22)] backdrop-blur-md"
+      >
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white text-slate-950 shadow-soft">
+          <Play fill="currentColor" size={28} />
         </div>
       </div>
-      <aside className="absolute bottom-32 right-4 z-10 flex flex-col items-center gap-5">
+      <aside className="absolute bottom-32 right-4 z-10 flex flex-col items-center gap-4">
         <Action icon={Heart} label={item.stats.likes} />
         <Action icon={MessageCircle} label={item.stats.comments} />
         <Action icon={Share2} label={item.stats.shares} />
-        <div className="mt-1 h-11 w-11 rounded-full border border-white/20 bg-[conic-gradient(from_0deg,#111,#fff,#111)] p-1">
-          <div className="h-full w-full rounded-full bg-black" />
+        <div className="mt-1 h-10 w-10 rounded-full border border-slate-200 bg-white p-[3px] shadow-soft">
+          <div className="flex h-full w-full items-center justify-center rounded-full bg-slate-100 text-slate-500">
+            <Music2 size={14} />
+          </div>
         </div>
       </aside>
       <div className="relative z-10 max-w-[292px]">
-        <div className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-white/12 bg-white/10 px-3 py-1 text-xs font-medium text-white/84 backdrop-blur">
+        <div className={cn("mb-3 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium shadow-soft backdrop-blur-md", toneAccent[item.posterTone])}>
           <Sparkles size={13} />
-          AI-ready video slot
+          {toneLabel[item.posterTone]}
         </div>
-        <p className="text-sm font-semibold text-white">@{item.author}</p>
-        <h2 className="mt-2 text-2xl font-semibold leading-tight">{item.title}</h2>
-        <p className="mt-2 line-clamp-3 text-sm leading-5 text-white/78">{item.caption}</p>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <p className="text-sm font-semibold text-white/85">@{item.author}</p>
+        <h2 className="mt-1.5 text-2xl font-semibold leading-tight text-white drop-shadow-sm">
+          {item.title}
+        </h2>
+        <p className="mt-2 line-clamp-3 text-sm leading-5 text-white/76 drop-shadow-sm">
+          {item.caption}
+        </p>
+        <div className="mt-3 flex flex-wrap gap-1.5">
           {item.tags.map((tag) => (
-            <span className="rounded-full bg-white/10 px-2.5 py-1 text-xs text-white/80" key={tag}>
+            <span
+              className="rounded-full border border-white/20 bg-white/12 px-2.5 py-0.5 text-xs text-white/82 shadow-soft backdrop-blur-md"
+              key={tag}
+            >
               #{tag}
             </span>
           ))}
         </div>
-        <div className="mt-4 inline-flex max-w-full items-center gap-2 rounded-full bg-black/30 px-3 py-1.5 text-xs text-white/70 backdrop-blur">
+        <div className="mt-4 inline-flex max-w-full items-center gap-2 rounded-full border border-white/20 bg-white/14 px-3 py-1.5 text-xs text-white/78 shadow-soft backdrop-blur-md">
           <Music2 className="h-3.5 w-3.5" />
           <span className="truncate">{item.soundtrack}</span>
         </div>
@@ -71,13 +97,13 @@ type ActionProps = {
 function Action({ icon: Icon, label }: ActionProps) {
   return (
     <button
-      className="flex flex-col items-center gap-1 text-xs font-semibold text-white drop-shadow"
+      className="flex flex-col items-center gap-1 text-xs font-semibold text-white"
       type="button"
     >
-      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/12 backdrop-blur-md">
-        <Icon fill="currentColor" size={24} />
+      <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/16 shadow-[0_10px_28px_rgba(15,23,42,0.22)] backdrop-blur-md">
+        <Icon size={20} strokeWidth={2} />
       </span>
-      <span>{label}</span>
+      <span className="text-white/78 drop-shadow-sm">{label}</span>
     </button>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Radio, Shield, Trophy } from "lucide-react";
+import { Radio, ShieldHalf, Trophy } from "lucide-react";
 import { useState } from "react";
 
 import { ActionChips } from "@/components/card-parts/ActionChips";
@@ -32,26 +32,38 @@ export function SportsPreMatchCard({ item, onUpdate }: SportsPreMatchCardProps) 
 
   return (
     <AiCardShell
-      expandedContent={<AiReason reason={`关键对位：${item.keyMatchup}。关注球员：${item.followedPlayer}。这张卡只给赛前最短路径，不做复杂数据墙。`} />}
+      expandedContent={
+        <AiReason
+          reason={`关键对位：${item.keyMatchup}。关注球员：${item.followedPlayer}。这张卡只给赛前最短路径，不做复杂数据墙。`}
+        />
+      }
       icon={<Trophy className="h-4 w-4" />}
       item={item}
       tone="sports"
       onUpdate={onUpdate}
     >
-      <div className="rounded-lg border border-lime-100/14 bg-black/24 p-3">
+      <div className="rounded-lg border border-slate-200 bg-slate-50/60 p-3">
         <div className="flex items-center justify-between gap-3">
-          <div className="text-center">
-            <Shield className="mx-auto mb-1 h-5 w-5 text-lime-100" />
-            <p className="text-lg font-semibold">{item.homeTeam}</p>
+          <div className="flex flex-1 flex-col items-center text-center">
+            <ShieldHalf className="mb-1 h-5 w-5 text-emerald-600" />
+            <p className="text-sm font-semibold text-slate-900">
+              {item.homeTeam}
+            </p>
           </div>
-          <div className="rounded-lg border border-white/10 bg-white/10 px-4 py-2 text-center">
-            <p className="text-xs text-lime-100/72">开赛前</p>
-            <p className="text-2xl font-semibold text-lime-50">{item.startInMinutes}</p>
-            <p className="text-xs text-lime-100/72">分钟</p>
+          <div className="flex flex-col items-center rounded-md border border-emerald-200 bg-emerald-50 px-4 py-2 text-center">
+            <p className="text-[11px] uppercase tracking-wide text-emerald-700">
+              开赛前
+            </p>
+            <p className="text-2xl font-semibold tabular-nums text-emerald-800">
+              {item.startInMinutes}
+            </p>
+            <p className="text-[11px] text-emerald-700">分钟</p>
           </div>
-          <div className="text-center">
-            <Shield className="mx-auto mb-1 h-5 w-5 text-cyan-100" />
-            <p className="text-lg font-semibold">{item.awayTeam}</p>
+          <div className="flex flex-1 flex-col items-center text-center">
+            <ShieldHalf className="mb-1 h-5 w-5 text-slate-500" />
+            <p className="text-sm font-semibold text-slate-900">
+              {item.awayTeam}
+            </p>
           </div>
         </div>
       </div>
@@ -65,21 +77,26 @@ export function SportsPreMatchCard({ item, onUpdate }: SportsPreMatchCardProps) 
           exit={{ opacity: 0, y: -8 }}
         >
           {item.insights.map((insight, index) => (
-            <div key={insight.id} className="rounded-lg border border-lime-100/12 bg-white/8 p-3">
-              <p className="flex items-center gap-2 text-sm font-semibold text-lime-50">
-                <Radio className="h-3.5 w-3.5" />
+            <div
+              key={insight.id}
+              className="rounded-lg border border-slate-200 bg-white p-3"
+            >
+              <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-900">
+                <Radio className="h-3.5 w-3.5 text-emerald-600" />
                 {index + 1}. {insight.title}
               </p>
-              <p className="mt-1 text-sm leading-5 text-white/70">{insight.detail}</p>
+              <p className="mt-1 text-sm leading-5 text-slate-600">
+                {insight.detail}
+              </p>
             </div>
           ))}
         </motion.div>
       </AnimatePresence>
 
       {item.predictionStats ? (
-        <div className="mt-3 rounded-lg border border-white/10 bg-white/8 p-3 text-xs text-white/76">
-          当前球迷倾向：主胜 {item.predictionStats.homeWin}% / 平局 {item.predictionStats.draw}% / 客胜{" "}
-          {item.predictionStats.awayWin}%
+        <div className="mt-3 rounded-md border border-slate-200 bg-slate-50/80 p-3 text-xs text-slate-600">
+          当前球迷倾向：主胜 {item.predictionStats.homeWin}% / 平局{" "}
+          {item.predictionStats.draw}% / 客胜 {item.predictionStats.awayWin}%
         </div>
       ) : null}
 

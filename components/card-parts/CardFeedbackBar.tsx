@@ -1,8 +1,9 @@
 "use client";
 
-import { Ban, Check, ChevronDown, ThumbsDown, ThumbsUp } from "lucide-react";
+import { ChevronDown, ThumbsDown, ThumbsUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/cn";
 
 type CardFeedbackBarProps = {
   expanded?: boolean;
@@ -18,13 +19,14 @@ export function CardFeedbackBar({
   onToggleExpand,
 }: CardFeedbackBarProps) {
   return (
-    <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
+    <div className="mt-4 flex items-center justify-between gap-2 border-t border-slate-200 pt-3">
       <div className="flex items-center gap-2">
         <Button
           aria-label="这个推荐准"
-          className="h-8 rounded-full px-2.5 text-xs"
+          className="h-8 rounded-full px-3 text-xs"
           type="button"
-          variant={feedbackStatus === "accurate" ? "default" : "glass"}
+          size="sm"
+          variant={feedbackStatus === "accurate" ? "default" : "outline"}
           onClick={() => onFeedback("accurate")}
         >
           <ThumbsUp className="h-3.5 w-3.5" />
@@ -32,9 +34,10 @@ export function CardFeedbackBar({
         </Button>
         <Button
           aria-label="这个推荐不准"
-          className="h-8 rounded-full px-2.5 text-xs"
+          className="h-8 rounded-full px-3 text-xs"
           type="button"
-          variant={feedbackStatus === "inaccurate" ? "secondary" : "glass"}
+          size="sm"
+          variant={feedbackStatus === "inaccurate" ? "secondary" : "outline"}
           onClick={() => onFeedback("inaccurate")}
         >
           <ThumbsDown className="h-3.5 w-3.5" />
@@ -43,14 +46,16 @@ export function CardFeedbackBar({
       </div>
       <Button
         aria-label={expanded ? "收起详情" : "展开详情"}
-        className="h-8 rounded-full px-2.5 text-xs"
+        className="h-8 rounded-full px-3 text-xs"
         type="button"
-        variant="glass"
+        size="sm"
+        variant="ghost"
         onClick={onToggleExpand}
       >
-        {expanded ? <Check className="h-3.5 w-3.5" /> : <Ban className="h-3.5 w-3.5" />}
-        {expanded ? "收起" : "展开"}
-        <ChevronDown className={expanded ? "h-3.5 w-3.5 rotate-180" : "h-3.5 w-3.5"} />
+        {expanded ? "收起" : "为什么"}
+        <ChevronDown
+          className={cn("h-3.5 w-3.5 transition-transform", expanded && "rotate-180")}
+        />
       </Button>
     </div>
   );

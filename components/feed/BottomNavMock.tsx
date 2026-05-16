@@ -1,35 +1,43 @@
-import { Home, Plus, Search, UserRound, Video } from "lucide-react";
+import { House, Inbox, PlusSquare, Search, UserRound } from "lucide-react";
 
 const items = [
-  { label: "Home", icon: Home, active: true },
+  { label: "Home", icon: House, active: true },
   { label: "Discover", icon: Search },
-  { label: "Create", icon: Plus, raised: true },
-  { label: "Inbox", icon: Video },
+  { label: "Create", icon: PlusSquare, raised: true },
+  { label: "Inbox", icon: Inbox },
   { label: "Me", icon: UserRound },
 ];
 
 export function BottomNavMock() {
   return (
-    <nav className="pointer-events-auto absolute inset-x-0 bottom-0 z-30 border-t border-white/10 bg-black/45 px-5 pb-5 pt-2 backdrop-blur-xl">
+    <nav className="pointer-events-auto absolute inset-x-0 bottom-0 z-30 border-t border-slate-200/80 bg-white/85 px-5 pb-5 pt-2 backdrop-blur">
       <div className="flex items-center justify-between">
         {items.map((item) => {
           const Icon = item.icon;
+          if (item.raised) {
+            return (
+              <button
+                key={item.label}
+                aria-label={item.label}
+                className="flex h-10 w-14 items-center justify-center rounded-xl border border-slate-200 bg-slate-900 text-white shadow-soft transition hover:bg-slate-800"
+                type="button"
+              >
+                <Icon size={20} strokeWidth={2.2} />
+              </button>
+            );
+          }
           return (
             <button
               key={item.label}
               aria-label={item.label}
               className={
-                item.raised
-                  ? "flex h-10 w-14 items-center justify-center rounded-xl bg-white text-black shadow-[0_0_18px_rgba(255,255,255,0.22)]"
-                  : "flex h-11 w-11 items-center justify-center rounded-full text-white/62 transition hover:bg-white/10 hover:text-white"
+                item.active
+                  ? "flex h-11 w-11 items-center justify-center rounded-full text-slate-900"
+                  : "flex h-11 w-11 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
               }
               type="button"
             >
-              <Icon
-                className={item.active ? "text-white" : undefined}
-                size={item.raised ? 22 : 20}
-                strokeWidth={item.raised ? 2.8 : 2.2}
-              />
+              <Icon size={20} strokeWidth={2} />
             </button>
           );
         })}
@@ -37,4 +45,3 @@ export function BottomNavMock() {
     </nav>
   );
 }
-

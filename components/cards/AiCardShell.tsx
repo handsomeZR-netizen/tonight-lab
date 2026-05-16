@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { Bookmark, BookmarkCheck, X } from "lucide-react";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -23,13 +24,18 @@ type AiCardShellProps<TItem extends AiCardBase> = {
   onUpdate: (updatedItem: TItem) => void;
 };
 
-const toneStyles: Record<AiCardTone, string> = {
-  food: "border-orange-200/20 bg-[radial-gradient(circle_at_18%_0%,rgba(251,146,60,0.36),transparent_36%),linear-gradient(150deg,#45180e,#161017_66%,#09090b)] shadow-orange-950/40",
-  trip: "border-sky-200/20 bg-[radial-gradient(circle_at_78%_8%,rgba(250,204,21,0.2),transparent_30%),radial-gradient(circle_at_20%_0%,rgba(56,189,248,0.24),transparent_34%),linear-gradient(150deg,#101938,#1b1230_62%,#09090b)] shadow-sky-950/35",
-  sports:
-    "border-lime-200/20 bg-[radial-gradient(circle_at_18%_0%,rgba(132,204,22,0.26),transparent_32%),linear-gradient(150deg,#06140d,#071525_58%,#050807)] shadow-lime-950/35",
-  recovery:
-    "border-violet-200/15 bg-[radial-gradient(circle_at_18%_0%,rgba(139,92,246,0.18),transparent_34%),linear-gradient(150deg,#080a12,#151424_60%,#07080d)] shadow-black/40",
+const toneSurface: Record<AiCardTone, string> = {
+  food: "border-amber-200/70 bg-white",
+  trip: "border-sky-200/70 bg-white",
+  sports: "border-emerald-200/70 bg-white",
+  recovery: "border-violet-200/70 bg-white",
+};
+
+const toneIconBg: Record<AiCardTone, string> = {
+  food: "bg-amber-50 text-amber-700 border-amber-200",
+  trip: "bg-sky-50 text-sky-700 border-sky-200",
+  sports: "bg-emerald-50 text-emerald-700 border-emerald-200",
+  recovery: "bg-violet-50 text-violet-700 border-violet-200",
 };
 
 function patchItem<TItem extends AiCardBase>(item: TItem, patch: Partial<AiCardBase>) {
@@ -55,60 +61,81 @@ export function AiCardShell<TItem extends AiCardBase>({
   }
 
   return (
-    <section className="flex h-full w-full snap-start snap-always items-center justify-center overflow-hidden bg-[#08080b] px-4 pb-20 pt-24">
+    <section className="flex h-full w-full snap-start snap-always items-center justify-center overflow-hidden bg-[hsl(220_14%_98%)] px-4 pb-20 pt-24">
       <motion.article
         layout
         className={cn(
-          "scrollbar-none relative isolate max-h-full w-full overflow-y-auto rounded-lg border p-3 text-white shadow-2xl",
-          toneStyles[tone],
+          "scrollbar-none relative isolate max-h-full w-full overflow-y-auto rounded-xl border p-4 text-slate-900 shadow-soft",
+          toneSurface[tone],
         )}
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: dismissed ? 0.45 : 1, y: 0 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(120deg,rgba(255,255,255,0.13),transparent_28%,transparent_72%,rgba(255,255,255,0.06))]" />
-
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <div className="mb-2 flex items-center gap-2">
               <SceneBadge aiLabel={item.aiLabel} sceneLabel={item.sceneLabel} />
-              <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/10 text-white/90">
+              <span
+                className={cn(
+                  "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-md border",
+                  toneIconBg[tone],
+                )}
+              >
                 {icon}
               </span>
             </div>
-            <h2 className="text-balance text-[23px] font-semibold leading-tight">
+            <h2 className="text-balance text-[22px] font-semibold leading-tight tracking-tight text-slate-900">
               {item.headline}
             </h2>
-            <p className="mt-1.5 text-sm leading-5 text-white/72">{item.personalReason}</p>
+            <p className="mt-1.5 text-sm leading-5 text-slate-500">
+              {item.personalReason}
+            </p>
           </div>
 
           <div className="flex shrink-0 flex-col gap-2">
             <Button
               aria-label={isSaved ? "取消收藏" : "收藏"}
-              className="h-9 w-9 rounded-full p-0"
+              className="h-8 w-8 rounded-full p-0"
               type="button"
-              variant="glass"
+              variant="outline"
               onClick={handleSave}
             >
-              {isSaved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+              {isSaved ? (
+                <BookmarkCheck className="h-4 w-4 text-slate-900" />
+              ) : (
+                <Bookmark className="h-4 w-4 text-slate-500" />
+              )}
             </Button>
             <Button
               aria-label="不感兴趣"
-              className="h-9 w-9 rounded-full p-0"
+              className="h-8 w-8 rounded-full p-0"
               type="button"
-              variant="glass"
+              variant="outline"
               onClick={() => onUpdate(patchItem(item, { isDismissed: true }))}
             >
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4 text-slate-500" />
             </Button>
           </div>
         </header>
 
-        <div className="mt-3">{children}</div>
+        {item.visual ? (
+          <div className="relative mt-4 aspect-video overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+            <Image
+              alt={item.visual.alt}
+              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 640px) 342px, 342px"
+              src={item.visual.src}
+            />
+          </div>
+        ) : null}
+
+        <div className="mt-4">{children}</div>
 
         {item.feedbackMessage ? (
           <motion.div
-            className="mt-3 rounded-full border border-white/10 bg-white/10 px-3 py-2 text-xs text-white/80"
+            className="mt-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600"
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
           >
@@ -128,12 +155,12 @@ export function AiCardShell<TItem extends AiCardBase>({
         <AnimatePresence>
           {dismissed ? (
             <motion.div
-              className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 p-6 text-center backdrop-blur-md"
+              className="absolute inset-0 z-20 flex items-center justify-center bg-white/85 p-6 text-center backdrop-blur-sm"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <div className="rounded-lg border border-white/15 bg-white/10 px-5 py-4 text-sm text-white">
+              <div className="rounded-md border border-slate-200 bg-white px-5 py-4 text-sm text-slate-700 shadow-soft">
                 已减少类似卡片
               </div>
             </motion.div>

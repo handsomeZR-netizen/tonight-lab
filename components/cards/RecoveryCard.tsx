@@ -32,18 +32,24 @@ export function RecoveryCard({ item, onUpdate }: RecoveryCardProps) {
 
   return (
     <AiCardShell
-      expandedContent={<AiReason reason={`状态：${stateCopy[item.energyState]}。这不是医疗建议，只是一个低刺激、短时长的恢复提示。`} />}
+      expandedContent={
+        <AiReason
+          reason={`状态：${stateCopy[item.energyState]}。这不是医疗建议，只是一个低刺激、短时长的恢复提示。`}
+        />
+      }
       icon={<Moon className="h-4 w-4" />}
       item={item}
       tone="recovery"
       onUpdate={onUpdate}
     >
-      <div className="mb-3 flex items-center justify-between rounded-lg border border-violet-100/12 bg-white/8 p-3">
-        <div className="flex items-center gap-2 text-sm text-white/72">
-          <Waves className="h-4 w-4 text-violet-100" />
+      <div className="mb-3 flex items-center justify-between rounded-lg border border-violet-200 bg-violet-50/70 p-3">
+        <div className="flex items-center gap-2 text-sm text-violet-800">
+          <Waves className="h-4 w-4 text-violet-600" />
           总时长
         </div>
-        <p className="text-xl font-semibold text-violet-50">{item.totalDuration}</p>
+        <p className="text-xl font-semibold tabular-nums text-violet-900">
+          {item.totalDuration}
+        </p>
       </div>
 
       <AnimatePresence mode="popLayout">
@@ -55,11 +61,16 @@ export function RecoveryCard({ item, onUpdate }: RecoveryCardProps) {
           exit={{ opacity: 0, y: -8 }}
         >
           {item.steps.map((step) => (
-            <div key={step.id} className="flex items-start gap-3 rounded-lg border border-white/10 bg-black/20 p-3">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-violet-100" />
+            <div
+              key={step.id}
+              className="flex items-start gap-3 rounded-lg border border-slate-200 bg-slate-50/60 p-3"
+            >
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-violet-500" />
               <div className="min-w-0">
-                <p className="text-sm font-medium text-white">{step.text}</p>
-                {step.duration ? <p className="mt-0.5 text-xs text-white/54">{step.duration}</p> : null}
+                <p className="text-sm font-medium text-slate-900">{step.text}</p>
+                {step.duration ? (
+                  <p className="mt-0.5 text-xs text-slate-500">{step.duration}</p>
+                ) : null}
               </div>
             </div>
           ))}

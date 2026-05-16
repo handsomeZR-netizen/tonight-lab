@@ -1,9 +1,8 @@
 import {
   Bot,
   Gauge,
-  Layers3,
   MousePointer2,
-  RefreshCw,
+  RefreshCcw,
   Sparkles,
 } from "lucide-react";
 
@@ -14,39 +13,46 @@ const metrics = [
 ];
 
 const controls = [
-  { label: "Cycle feed", icon: RefreshCw },
+  { label: "Cycle feed", icon: RefreshCcw },
   { label: "Inject card", icon: Sparkles },
   { label: "Inspect state", icon: MousePointer2 },
 ];
 
 export function DemoControlPanel() {
   return (
-    <aside className="w-full max-w-[360px] text-white">
+    <aside className="w-full max-w-[360px] text-slate-900">
       <div className="mb-6">
-        <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1 text-xs font-medium text-cyan-100">
-          <Bot size={14} />
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-soft">
+          <Bot className="h-3.5 w-3.5" />
           Mock AI environment
         </div>
-        <h1 className="mt-4 text-3xl font-semibold leading-tight">
+        <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-slate-900">
           抖音信息流 AI 卡片 Demo
         </h1>
+        <p className="mt-2 text-sm leading-6 text-slate-500">
+          shadcn 风格 · 浅色低饱和 · 全部由本地 mock 数据驱动。
+        </p>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
         {metrics.map((metric) => (
           <div
-            className="rounded-lg border border-white/10 bg-white/[0.06] p-3"
+            className="rounded-lg border border-slate-200 bg-white p-3 shadow-soft"
             key={metric.label}
           >
-            <p className="text-[11px] uppercase text-white/46">{metric.label}</p>
-            <p className="mt-2 text-lg font-semibold">{metric.value}</p>
+            <p className="text-[11px] uppercase tracking-wide text-slate-400">
+              {metric.label}
+            </p>
+            <p className="mt-1.5 text-lg font-semibold tabular-nums text-slate-900">
+              {metric.value}
+            </p>
           </div>
         ))}
       </div>
 
-      <div className="mt-5 rounded-lg border border-white/10 bg-white/[0.06] p-4">
-        <div className="mb-4 flex items-center gap-2 text-sm font-semibold">
-          <Gauge size={17} />
+      <div className="mt-5 rounded-lg border border-slate-200 bg-white p-4 shadow-soft">
+        <div className="mb-4 flex items-center gap-2 text-sm font-semibold text-slate-900">
+          <Gauge className="h-4 w-4 text-slate-500" />
           Demo controls
         </div>
         <div className="grid gap-2">
@@ -54,28 +60,18 @@ export function DemoControlPanel() {
             const Icon = control.icon;
             return (
               <button
-                className="flex items-center justify-between rounded-md border border-white/10 bg-black/22 px-3 py-2.5 text-sm text-white/82 transition hover:border-cyan-300/40 hover:bg-cyan-300/10 hover:text-white"
+                className="flex items-center justify-between rounded-md border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900"
                 key={control.label}
                 type="button"
               >
                 <span>{control.label}</span>
-                <Icon size={16} />
+                <Icon className="h-4 w-4 text-slate-500" />
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="mt-5 rounded-lg border border-cyan-300/20 bg-cyan-300/[0.07] p-4">
-        <div className="flex items-center gap-2 text-sm font-semibold text-cyan-100">
-          <Layers3 size={17} />
-          生成说明
-        </div>
-        <p className="mt-2 text-sm leading-6 text-white/62">
-          页面文案呈现为 AI 生成和 AI 重排，但当前全部由本地 mock 数据驱动，方便后续替换为 AI SDK structured output。
-        </p>
-      </div>
     </aside>
   );
 }
-

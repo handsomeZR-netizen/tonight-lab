@@ -2,13 +2,16 @@
 
 一个模拟抖音信息流中 AI 情境卡片的本地 demo。
 
+![AI Feed Cards 产品演示封面](/public/images/generated/landing-hero-cover.png)
+
 ## 功能
 
 - 竖滑信息流
-- 普通视频占位内容
+- 真实短视频感封面内容
 - AI 情境卡片
 - 卡片内轻互动
 - 不跳转的即时内容重排
+- 产品官网式首页包装
 
 ## 启动
 

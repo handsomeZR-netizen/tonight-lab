@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Utensils } from "lucide-react";
+import { UtensilsCrossed } from "lucide-react";
 import { useState } from "react";
 
 import { ActionChips } from "@/components/card-parts/ActionChips";
@@ -32,8 +32,12 @@ export function FoodDecisionCard({ item, onUpdate }: FoodDecisionCardProps) {
 
   return (
     <AiCardShell
-      expandedContent={<AiReason reason={`天气：${item.weather}。预算：${item.budget}。推荐优先保留热度、速度和不踩雷。`} />}
-      icon={<Utensils className="h-4 w-4" />}
+      expandedContent={
+        <AiReason
+          reason={`天气：${item.weather}。预算：${item.budget}。推荐优先保留热度、速度和不踩雷。`}
+        />
+      }
+      icon={<UtensilsCrossed className="h-4 w-4" />}
       item={item}
       tone="food"
       onUpdate={onUpdate}
@@ -41,7 +45,7 @@ export function FoodDecisionCard({ item, onUpdate }: FoodDecisionCardProps) {
       <AnimatePresence mode="popLayout">
         <motion.div
           key={item.options.map((option) => option.id).join("-")}
-          className="grid gap-1.5"
+          className="grid gap-2"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
@@ -50,25 +54,32 @@ export function FoodDecisionCard({ item, onUpdate }: FoodDecisionCardProps) {
           {item.options.map((option, index) => (
             <div
               key={option.id}
-              className="rounded-lg border border-orange-100/14 bg-black/20 p-2.5 backdrop-blur"
+              className="rounded-lg border border-slate-200 bg-slate-50/60 p-3"
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="flex h-5 w-5 items-center justify-center rounded-full bg-orange-200/20 text-[11px] font-semibold">
+                    <span className="flex h-5 w-5 items-center justify-center rounded-full border border-amber-200 bg-amber-50 text-[11px] font-semibold text-amber-700">
                       {index + 1}
                     </span>
-                    <h3 className="text-base font-semibold text-orange-50">{option.name}</h3>
+                    <h3 className="text-base font-semibold text-slate-900">
+                      {option.name}
+                    </h3>
                   </div>
-                  <p className="mt-0.5 line-clamp-2 text-sm leading-5 text-white/72">{option.reason}</p>
+                  <p className="mt-1 line-clamp-2 text-sm leading-5 text-slate-600">
+                    {option.reason}
+                  </p>
                 </div>
-                <span className="shrink-0 rounded-full bg-orange-200/18 px-2.5 py-1 text-sm font-semibold text-orange-50">
+                <span className="shrink-0 rounded-md border border-amber-200 bg-amber-50 px-2.5 py-1 text-sm font-semibold text-amber-800">
                   {option.price}
                 </span>
               </div>
-              <div className="mt-1.5 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 {option.tags.map((tag) => (
-                  <span key={tag} className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white/72">
+                  <span
+                    key={tag}
+                    className="rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs text-slate-600"
+                  >
                     {tag}
                   </span>
                 ))}
@@ -78,7 +89,7 @@ export function FoodDecisionCard({ item, onUpdate }: FoodDecisionCardProps) {
         </motion.div>
       </AnimatePresence>
 
-      <div className="mt-3">
+      <div className="mt-4">
         <ActionChips
           actions={item.primaryActions}
           loadingActionId={loadingActionId}

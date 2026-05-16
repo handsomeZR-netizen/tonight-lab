@@ -13,12 +13,19 @@ export interface FeedItemBase {
   createdAt?: string;
 }
 
+export interface FeedVisual {
+  src: string;
+  alt: string;
+  prompt: string;
+}
+
 export interface VideoFeedItem extends FeedItemBase {
   type: "video";
   author: string;
   caption: string;
   soundtrack: string;
   posterTone: "food" | "trip" | "sports";
+  poster: FeedVisual;
   tags: string[];
   stats: {
     likes: string;
@@ -40,6 +47,7 @@ export interface AiCardBase extends FeedItemBase {
   personalReason: string;
   primaryActions: ActionChip[];
   secondaryActions?: ActionChip[];
+  visual?: FeedVisual;
   isSaved?: boolean;
   isDismissed?: boolean;
   expanded?: boolean;
