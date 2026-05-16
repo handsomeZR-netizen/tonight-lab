@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ArrowDown,
   BellRing,
@@ -16,9 +18,14 @@ import {
   WalletCards,
 } from "lucide-react";
 import Image from "next/image";
+import { useRef } from "react";
 
 import { FeedViewport } from "@/components/feed/FeedViewport";
 import { MobileFrame } from "@/components/feed/MobileFrame";
+import { PageScrollHint } from "@/components/feed/PageScrollHint";
+import { PhoneShell } from "@/components/feed/PhoneShell";
+import { PhoneSpotlight } from "@/components/feed/PhoneSpotlight";
+import { PhoneSwipeIndicator } from "@/components/feed/PhoneSwipeIndicator";
 
 const productPoints = [
   { label: "少一次退出", value: "边刷边决定", icon: Layers3 },
@@ -83,9 +90,11 @@ const flow = [
 ];
 
 export default function Page() {
+  const phoneRef = useRef<HTMLDivElement>(null);
+
   return (
     <main className="min-h-screen overflow-hidden bg-[hsl(44_38%_97%)] text-slate-950">
-      <section className="relative overflow-hidden border-b border-slate-200/70 px-4 pb-12 pt-5 sm:px-6 lg:px-8">
+      <section className="relative border-b border-slate-200/70 px-4 pb-12 pt-5 sm:px-6 lg:px-8">
         <Image
           alt="手机信息流中出现 AI 情境卡片的产品展示背景"
           className="absolute inset-0 h-full w-full object-cover opacity-[0.34]"
@@ -97,17 +106,19 @@ export default function Page() {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.82)_48%,rgba(255,255,255,0.72)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[hsl(44_38%_97%)] to-transparent" />
 
-        <div className="relative z-10 mx-auto grid min-h-[88svh] max-w-6xl items-center gap-9 lg:grid-cols-[minmax(0,0.95fr)_minmax(390px,0.78fr)] lg:gap-12">
+        <div className="relative z-10 mx-auto grid min-h-[88svh] max-w-6xl items-center gap-9 lg:grid-cols-[minmax(0,1fr)_minmax(390px,0.72fr)] lg:gap-12">
           <div className="max-w-2xl pb-2 pt-8 lg:pt-0">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/82 px-3 py-1 text-xs font-medium text-slate-600 shadow-soft backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/82 px-3 py-1 text-xs font-medium text-slate-700 shadow-soft backdrop-blur">
               <Sparkles className="h-3.5 w-3.5 text-amber-600" />
-              Scene-aware feed
+              一份会读情境的内容流
             </div>
-            <h1 className="mt-5 max-w-[680px] text-4xl font-semibold leading-[1.04] tracking-normal text-slate-950 sm:text-5xl lg:text-[64px]">
-              刷到刚好有用的 AI 卡片
+            <h1 className="mt-6 max-w-[680px] font-serif font-medium text-[44px] leading-[1.08] tracking-[-0.01em] text-slate-950 sm:text-[58px] lg:text-[72px]">
+              把刚好用得上的那一条，
+              <br className="hidden sm:inline" />
+              留在你眼前。
             </h1>
-            <p className="mt-5 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
-              在短视频流里，把吃饭、出行、观赛和恢复这些即时决策，变成可直接操作的情境卡。
+            <p className="mt-6 max-w-xl text-[15px] leading-[1.75] text-slate-600 sm:text-base">
+              AI 卡片不再单独成页，而是嵌进信息流——出现在你正要决定吃什么、去哪、看哪场比赛的那一刻。
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
@@ -145,12 +156,21 @@ export default function Page() {
             </div>
           </div>
 
-          <div id="experience" className="flex justify-center lg:justify-end">
-            <MobileFrame>
-              <FeedViewport />
-            </MobileFrame>
+          <div
+            id="experience"
+            ref={phoneRef}
+            className="flex justify-center lg:justify-end"
+          >
+            <PhoneShell>
+              <MobileFrame>
+                <FeedViewport />
+              </MobileFrame>
+              <PhoneSwipeIndicator targetRef={phoneRef} />
+            </PhoneShell>
           </div>
         </div>
+        <PhoneSpotlight targetRef={phoneRef} />
+        <PageScrollHint />
       </section>
 
       <section

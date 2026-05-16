@@ -49,6 +49,22 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      fontFamily: {
+        sans: [
+          "var(--font-sans)",
+          "ui-sans-serif",
+          "system-ui",
+          "Noto Sans SC",
+          "sans-serif",
+        ],
+        serif: [
+          "var(--font-serif-sc)",
+          "ui-serif",
+          "Source Han Serif SC",
+          "Songti SC",
+          "serif",
+        ],
+      },
       boxShadow: {
         phone: "0 24px 60px -20px rgba(15, 23, 42, 0.18), 0 8px 24px -12px rgba(15, 23, 42, 0.1)",
         soft: "0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06)",
