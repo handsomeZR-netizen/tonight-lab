@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { HeroSection } from "@/components/landing/HeroSection";
+import { SiteFooter } from "@/components/landing/SiteFooter";
 
 const scenarios = [
   {
@@ -74,137 +75,168 @@ const flow = [
 
 export default function Page() {
   return (
-    <main className="min-h-screen overflow-hidden bg-[hsl(44_38%_97%)] text-slate-950">
-      <HeroSection />
-
-      <section
-        id="scenarios"
-        className="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[0.72fr_1fr] lg:px-8 lg:py-20"
+    <>
+      <a
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-slate-900 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-phone focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2"
+        href="#main-content"
       >
-        <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-soft">
-            <BrainCircuit className="h-3.5 w-3.5 text-slate-500" />
-            用内容进入决策
-          </div>
-          <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-normal text-slate-950 sm:text-4xl">
-            每一次刷到，都可以顺手完成一个小决定。
-          </h2>
-          <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600">
-            用户不需要先打开一个工具，再解释自己想要什么。卡片从正在看的内容出发，直接给出下一步。
-          </p>
-        </div>
+        跳到主内容
+      </a>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="min-h-screen overflow-hidden bg-[hsl(44_38%_97%)] text-slate-950 focus:outline-none"
+      >
+        <HeroSection />
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          {scenarios.map((scenario) => {
-            const Icon = scenario.icon;
-            return (
-              <article
-                className="rounded-lg border border-slate-200 bg-white p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-phone"
-                key={scenario.title}
-              >
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <div
-                    className={`inline-flex h-10 w-10 items-center justify-center rounded-md border ${scenario.tone}`}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-500">
-                    {scenario.detail}
-                  </span>
-                </div>
-                <h3 className="text-lg font-semibold text-slate-950">
-                  {scenario.title}
-                </h3>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  {scenario.description}
-                </p>
-              </article>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-        <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.82fr_1fr] lg:items-start">
+        <section
+          aria-labelledby="scenarios-heading"
+          id="scenarios"
+          className="mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:px-6 lg:grid-cols-[0.72fr_1fr] lg:px-8 lg:py-20"
+        >
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
-              <Compass className="h-3.5 w-3.5 text-sky-600" />
-              更懂当下
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-soft">
+              <BrainCircuit className="h-3.5 w-3.5 text-slate-500" />
+              用内容进入决策
             </div>
-            <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-normal text-slate-950 sm:text-4xl">
-              好的推荐不是更多内容，而是更少犹豫。
+            <h2
+              id="scenarios-heading"
+              className="mt-4 text-3xl font-semibold leading-tight tracking-normal text-slate-950 sm:text-4xl"
+            >
+              每一次刷到，都可以顺手完成一个小决定。
             </h2>
             <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600">
-              卡片把用户此刻最可能在意的因素提前摆好：距离、时间、预算、状态。它不替用户做所有决定，只把选择变得更轻。
+              用户不需要先打开一个工具，再解释自己想要什么。卡片从正在看的内容出发，直接给出下一步。
             </p>
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
-            {signals.map((signal) => {
-              const Icon = signal.icon;
+            {scenarios.map((scenario) => {
+              const Icon = scenario.icon;
               return (
                 <article
-                  className="flex items-center gap-4 rounded-lg border border-slate-200 bg-[hsl(44_38%_98%)] p-4 shadow-soft"
-                  key={signal.label}
+                  className="rounded-lg border border-slate-200 bg-white p-4 shadow-soft transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-phone"
+                  key={scenario.title}
                 >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="text-xs font-medium text-slate-500">
-                      {signal.label}
-                    </p>
-                    <p className="mt-1 text-base font-semibold text-slate-950">
-                      {signal.value}
-                    </p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-slate-200/70 bg-[hsl(218_28%_96%)] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-soft">
-              <Layers3 className="h-3.5 w-3.5 text-slate-500" />
-              留在信息流里完成
-            </div>
-            <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-normal text-slate-950 sm:text-4xl">
-              从兴趣到行动，只需要一张卡片的距离。
-            </h2>
-          </div>
-
-          <div className="mt-8 grid gap-3 lg:grid-cols-3">
-            {flow.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <article
-                  className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft"
-                  key={item.title}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-700">
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div
+                      className={`inline-flex h-10 w-10 items-center justify-center rounded-md border ${scenario.tone}`}
+                    >
                       <Icon className="h-5 w-5" />
-                    </span>
-                    <span className="text-sm font-semibold tabular-nums text-slate-300">
-                      0{index + 1}
+                    </div>
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] font-medium text-slate-500">
+                      {scenario.detail}
                     </span>
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold text-slate-950">
-                    {item.title}
+                  <h3 className="text-lg font-semibold text-slate-950">
+                    {scenario.title}
                   </h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {item.description}
+                    {scenario.description}
                   </p>
                 </article>
               );
             })}
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+
+        <section
+          aria-labelledby="signals-heading"
+          id="signals"
+          className="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+        >
+          <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.82fr_1fr] lg:items-start">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+                <Compass className="h-3.5 w-3.5 text-sky-600" />
+                更懂当下
+              </div>
+              <h2
+                id="signals-heading"
+                className="mt-4 text-3xl font-semibold leading-tight tracking-normal text-slate-950 sm:text-4xl"
+              >
+                好的推荐不是更多内容，而是更少犹豫。
+              </h2>
+              <p className="mt-4 max-w-xl text-sm leading-6 text-slate-600">
+                卡片把用户此刻最可能在意的因素提前摆好：距离、时间、预算、状态。它不替用户做所有决定，只把选择变得更轻。
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {signals.map((signal) => {
+                const Icon = signal.icon;
+                return (
+                  <article
+                    className="flex items-center gap-4 rounded-lg border border-slate-200 bg-[hsl(44_38%_98%)] p-4 shadow-soft"
+                    key={signal.label}
+                  >
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-medium text-slate-500">
+                        {signal.label}
+                      </p>
+                      <p className="mt-1 text-base font-semibold text-slate-950">
+                        {signal.value}
+                      </p>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section
+          aria-labelledby="flow-heading"
+          id="flow"
+          className="border-y border-slate-200/70 bg-[hsl(218_28%_96%)] px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+        >
+          <div className="mx-auto max-w-6xl">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-soft">
+                <Layers3 className="h-3.5 w-3.5 text-slate-500" />
+                留在信息流里完成
+              </div>
+              <h2
+                id="flow-heading"
+                className="mt-4 text-3xl font-semibold leading-tight tracking-normal text-slate-950 sm:text-4xl"
+              >
+                从兴趣到行动，只需要一张卡片的距离。
+              </h2>
+            </div>
+
+            <div className="mt-8 grid gap-3 lg:grid-cols-3">
+              {flow.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <article
+                    className="rounded-lg border border-slate-200 bg-white p-5 shadow-soft"
+                    key={item.title}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-700">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <span className="text-sm font-semibold tabular-nums text-slate-300">
+                        0{index + 1}
+                      </span>
+                    </div>
+                    <h3 className="mt-5 text-lg font-semibold text-slate-950">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                      {item.description}
+                    </p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      </main>
+      <SiteFooter />
+    </>
   );
 }
