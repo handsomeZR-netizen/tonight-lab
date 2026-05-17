@@ -75,9 +75,24 @@ a {
   height: 1px;
 }
 
+@keyframes hero-cta-shimmer {
+  0% {
+    transform: translateX(-50%) skewX(-12deg);
+  }
+  60% {
+    transform: translateX(350%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(350%) skewX(-12deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  [style*="hero-cta-shimmer"] {
+    animation: none !important;
   }
 }
 

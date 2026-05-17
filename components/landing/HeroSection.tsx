@@ -1,7 +1,9 @@
 "use client";
 
+import { motion } from "framer-motion";
 import {
   ArrowDown,
+  ArrowRight,
   BellRing,
   BrainCircuit,
   Layers3,
@@ -128,19 +130,42 @@ export function HeroSection() {
             用户刷到美食、路线、比赛或放松内容时，不用跳去另一个工具。卡片直接整理选项、解释原因，并把调整和保存留在当前页面。
           </p>
 
-          <div className="mt-7 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-wrap items-center gap-3">
             <a
-              className="inline-flex h-11 items-center justify-center rounded-full bg-slate-950 px-5 text-sm font-semibold text-white shadow-phone transition hover:bg-slate-800"
+              className="group relative inline-flex h-12 items-center justify-center gap-2 overflow-hidden rounded-full bg-slate-950 px-6 text-sm font-semibold text-white shadow-phone transition-all duration-300 hover:bg-slate-800 hover:shadow-[0_24px_60px_-22px_rgba(15,23,42,0.55)]"
               href="#experience"
             >
-              进入手机预览
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                style={{
+                  animation: "hero-cta-shimmer 2.6s ease-in-out infinite",
+                }}
+              />
+              <span className="relative">进入手机预览</span>
+              <ArrowRight className="relative h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
             </a>
             <a
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white/82 px-5 text-sm font-semibold text-slate-800 shadow-soft backdrop-blur transition hover:border-slate-400 hover:bg-white"
+              className="group relative inline-flex h-12 items-center justify-center gap-2 rounded-full border border-slate-300 bg-white/82 px-5 text-sm font-semibold text-slate-800 shadow-soft backdrop-blur transition-all duration-300 hover:border-amber-400/70 hover:bg-white hover:shadow-[0_18px_40px_-22px_rgba(180,83,9,0.5)]"
               href="#scenarios"
             >
-              看四个场景
-              <ArrowDown className="h-4 w-4" />
+              <span
+                aria-hidden
+                className="pointer-events-none absolute inset-0 rounded-full ring-2 ring-amber-300/0 transition-all duration-500 group-hover:ring-amber-300/40"
+              />
+              <span className="relative">向下体验四个真实场景</span>
+              <motion.span
+                aria-hidden
+                animate={{ y: [0, 4, 0] }}
+                transition={{
+                  duration: 1.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="relative inline-flex"
+              >
+                <ArrowDown className="h-4 w-4 text-amber-600" />
+              </motion.span>
             </a>
           </div>
 
