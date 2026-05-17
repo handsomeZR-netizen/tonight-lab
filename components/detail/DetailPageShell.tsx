@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { BackToFeedButton } from "@/components/detail/BackToFeedButton";
 import { SavedRibbon } from "@/components/detail/SavedRibbon";
@@ -81,13 +83,18 @@ export function DetailPageShell({
   children,
 }: DetailPageShellProps) {
   const tokens = toneTokens[tone];
-  const today = new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-  })
-    .format(new Date())
-    .toUpperCase();
+  const [today, setToday] = useState("TONIGHT");
+  useEffect(() => {
+    setToday(
+      new Intl.DateTimeFormat("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+      })
+        .format(new Date())
+        .toUpperCase(),
+    );
+  }, []);
 
   const ribbonLede = heroLede ?? toneLede[tone];
   const ribbonMeta = heroMeta ?? `${today} · ${getReadEstimate(tone)}`;

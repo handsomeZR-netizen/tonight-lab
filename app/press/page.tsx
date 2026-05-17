@@ -14,6 +14,33 @@ export const metadata: Metadata = {
   title: "Press Kit",
   description:
     "Tonight Lab · 路演与媒体素材包，包含产品简介、视觉卡片和联系方式。",
+  alternates: {
+    canonical: "/press",
+  },
+  openGraph: {
+    type: "website",
+    locale: "zh_CN",
+    title: "Press Kit · Tonight Lab",
+    description:
+      "路演与媒体素材包：产品简介、四张视觉卡片、技术栈和联系方式。",
+    siteName: "Tonight Lab",
+    url: "/press",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Tonight Lab · Press Kit",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Press Kit · Tonight Lab",
+    description:
+      "路演与媒体素材包：产品简介、四张视觉卡片、技术栈和联系方式。",
+    images: ["/opengraph-image"],
+  },
 };
 
 type CardPreview = {

@@ -8,7 +8,7 @@ import {
   type DetailTone,
 } from "./detail-content";
 
-export const siteMetadataBase = "https://tonightlab.vercel.app";
+export const siteMetadataBase = "https://tonight-lab.vercel.app";
 export const siteName = "Tonight Lab";
 export const siteTitle = "Tonight Lab · 今晚的轻决策信息流";
 export const siteDescription =
