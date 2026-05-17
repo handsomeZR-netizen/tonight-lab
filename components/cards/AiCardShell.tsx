@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { Bookmark, BookmarkCheck, Sparkles, X } from "lucide-react";
+import { ArrowRight, Bookmark, BookmarkCheck, Play, Sparkles, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -11,10 +11,13 @@ import { CardFeedbackBar } from "@/components/card-parts/CardFeedbackBar";
 import { ExpandablePanel } from "@/components/card-parts/ExpandablePanel";
 import { SceneBadge } from "@/components/card-parts/SceneBadge";
 import { Button } from "@/components/ui/button";
+import { useLocalStorageState } from "@/hooks/useLocalStorageState";
 import { cn } from "@/lib/cn";
 import type { AiCardBase } from "@/lib/types";
 
 export type AiCardTone = "food" | "trip" | "sports" | "recovery";
+
+export const SAVED_CARDS_STORAGE_KEY = "tonightlab:saved-cards:v1";
 
 type AiCardShellProps<TItem extends AiCardBase> = {
   item: TItem;
@@ -62,6 +65,34 @@ const toneInsight: Record<AiCardTone, string> = {
   recovery: "border-violet-200/70 bg-violet-50/85 text-violet-950",
 };
 
+const toneCtaGradient: Record<AiCardTone, string> = {
+  food: "bg-[linear-gradient(135deg,#1f1305_0%,#78350f_55%,#b45309_100%)]",
+  trip: "bg-[linear-gradient(135deg,#0c1c2e_0%,#0c4a6e_55%,#0369a1_100%)]",
+  sports: "bg-[linear-gradient(135deg,#0a1f15_0%,#064e3b_55%,#047857_100%)]",
+  recovery: "bg-[linear-gradient(135deg,#1a0f2e_0%,#4c1d95_55%,#6d28d9_100%)]",
+};
+
+const toneCtaBadge: Record<AiCardTone, string> = {
+  food: "bg-amber-400 text-amber-950",
+  trip: "bg-sky-300 text-sky-950",
+  sports: "bg-emerald-300 text-emerald-950",
+  recovery: "bg-violet-300 text-violet-950",
+};
+
+const toneCtaRing: Record<AiCardTone, string> = {
+  food: "focus-visible:ring-amber-400/70",
+  trip: "focus-visible:ring-sky-400/70",
+  sports: "focus-visible:ring-emerald-400/70",
+  recovery: "focus-visible:ring-violet-400/70",
+};
+
+const toneCtaGlow: Record<AiCardTone, string> = {
+  food: "rgba(180,83,9,0.55)",
+  trip: "rgba(2,132,199,0.5)",
+  sports: "rgba(5,150,105,0.5)",
+  recovery: "rgba(124,58,237,0.55)",
+};
+
 function patchItem<TItem extends AiCardBase>(item: TItem, patch: Partial<AiCardBase>) {
   return { ...item, ...patch } as TItem;
 }
@@ -76,12 +107,27 @@ export function AiCardShell<TItem extends AiCardBase>({
   detailLabel = "打开完整玩法",
   onUpdate,
 }: AiCardShellProps<TItem>) {
-  const isSaved = item.isSaved === true;
+  const [savedIds, setSavedIds] = useLocalStorageState<string[]>(
+    SAVED_CARDS_STORAGE_KEY,
+    [],
+  );
+  const persistedSaved = savedIds.includes(item.id);
+  const isSaved = persistedSaved || item.isSaved === true;
   const expanded = item.expanded === true;
   const dismissed = item.isDismissed === true;
+  const coverTransitionName = `card-${tone}-cover`;
 
   function handleSave() {
     const nextSaved = !isSaved;
+    setSavedIds((prev) => {
+      const set = new Set(prev);
+      if (nextSaved) {
+        set.add(item.id);
+      } else {
+        set.delete(item.id);
+      }
+      return Array.from(set);
+    });
     onUpdate(patchItem(item, { isSaved: nextSaved }));
     toast(nextSaved ? "已收藏，之后可以在“我”里找到" : "已取消收藏");
   }
@@ -105,13 +151,18 @@ export function AiCardShell<TItem extends AiCardBase>({
       >
         {item.visual ? (
           <header className="relative min-h-[218px] overflow-hidden rounded-b-[26px] bg-slate-950">
-            <Image
-              alt={item.visual.alt}
-              className="h-full w-full object-cover"
-              fill
-              sizes="(max-width: 640px) 342px, 342px"
-              src={item.visual.src}
-            />
+            <div
+              className="absolute inset-0"
+              style={{ viewTransitionName: coverTransitionName }}
+            >
+              <Image
+                alt={item.visual.alt}
+                className="h-full w-full object-cover"
+                fill
+                sizes="(max-width: 640px) 342px, 342px"
+                src={item.visual.src}
+              />
+            </div>
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(2,6,23,0.08)_0%,rgba(2,6,23,0.28)_42%,rgba(2,6,23,0.84)_100%)]" />
             <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-slate-950/42 to-transparent" />
 
@@ -186,17 +237,65 @@ export function AiCardShell<TItem extends AiCardBase>({
 
           {detailHref ? (
             <Link
+              aria-label={`${detailLabel}，约 30 秒可玩完`}
               className={cn(
-                "mt-4 flex min-h-12 items-center justify-between gap-3 rounded-2xl border px-4 py-3 text-sm font-semibold shadow-soft transition hover:-translate-y-0.5",
-                toneInsight[tone],
+                "group relative mt-4 flex min-h-[60px] items-center justify-between gap-3 overflow-hidden rounded-2xl px-5 py-3.5 text-white shadow-phone transition-all duration-300 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+                toneCtaGradient[tone],
+                toneCtaRing[tone],
               )}
               href={detailHref}
+              style={
+                {
+                  "--cta-glow": toneCtaGlow[tone],
+                  boxShadow:
+                    "0 18px 38px -20px var(--cta-glow), 0 8px 20px -12px rgba(15,23,42,0.45)",
+                } as React.CSSProperties
+              }
             >
-              <span className="inline-flex items-center gap-2">
-                <Sparkles className="h-4 w-4" />
-                {detailLabel}
+              <motion.span
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                initial={{ x: "-100%" }}
+                animate={{ x: ["-50%", "350%"] }}
+                transition={{
+                  duration: 3.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  repeatDelay: 1.4,
+                }}
+              />
+              <span className="relative inline-flex items-center gap-2.5">
+                <span
+                  className={cn(
+                    "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full shadow-sm",
+                    toneCtaBadge[tone],
+                  )}
+                >
+                  <Play className="h-3 w-3" fill="currentColor" />
+                </span>
+                <span className="flex flex-col leading-tight">
+                  <span className="text-[15px] font-semibold tracking-tight">
+                    {detailLabel}
+                  </span>
+                  <span className="text-[11px] font-medium text-white/70">
+                    约 30 秒 · 可调可保存
+                  </span>
+                </span>
               </span>
-              <span className="text-lg leading-none">→</span>
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{
+                  duration: 1.6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className={cn(
+                  "relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full shadow-sm transition-transform duration-300 group-hover:translate-x-1.5",
+                  toneCtaBadge[tone],
+                )}
+              >
+                <ArrowRight className="h-4 w-4" />
+              </motion.span>
             </Link>
           ) : null}
 

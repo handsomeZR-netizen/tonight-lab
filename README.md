@@ -12,7 +12,7 @@
 
 它不是普通的卡片列表，而是一组接近产品评审级别的交互原型：短视频式滑动、AI 情境推荐、杂志化详情页、WebGL 氛围层和 20 张定制生成图资产被放进同一个体验里，让一个简单 demo 看起来像一支已经准备好上台路演的小型产品。
 
-![Tonight Lab 产品演示封面](/public/images/generated/landing-hero-cover.png)
+![Tonight Lab 产品演示封面](public/images/generated/landing-hero-cover.png)
 
 ## 项目亮点
 

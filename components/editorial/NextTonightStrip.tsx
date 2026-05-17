@@ -100,6 +100,7 @@ export function NextTonightStrip({ currentTone, className }: NextTonightStripPro
               <Link
                 key={entry.tone}
                 href={entry.href}
+                prefetch
                 className="group relative flex flex-col gap-4 overflow-hidden rounded-[28px] border border-slate-200 bg-white/82 p-4 shadow-soft transition hover:-translate-y-1 hover:border-slate-300 hover:shadow-phone"
               >
                 <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-slate-100">

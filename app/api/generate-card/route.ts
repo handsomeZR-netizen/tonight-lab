@@ -1,53 +1,71 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { transformCard } from "@/lib/card-transforms";
 import { mockAiCards } from "@/lib/mock-feed";
 import type {
   AiFeedCard,
   FeedItemType,
-  GenerateCardRequest,
   GenerateCardResponse,
 } from "@/lib/types";
 
-export async function POST(request: Request): Promise<NextResponse<GenerateCardResponse>> {
-  const body = await readRequestBody(request);
-  const currentCard = body.currentCard;
-  const actionId = body.action?.id;
+const feedItemTypeSchema = z.enum([
+  "video",
+  "food_decision",
+  "micro_trip",
+  "sports_pre_match",
+  "recovery",
+]);
 
-  if (currentCard && actionId) {
+const aiFeedCardSchema = z
+  .object({
+    type: feedItemTypeSchema.exclude(["video"]),
+  })
+  .passthrough();
+
+const actionSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().optional(),
+  intent: z.literal("refine").optional(),
+});
+
+const requestSchema = z.object({
+  cardType: feedItemTypeSchema.optional(),
+  action: actionSchema.optional(),
+  currentCard: aiFeedCardSchema.optional(),
+});
+
+export async function POST(
+  request: Request,
+): Promise<NextResponse<GenerateCardResponse | { error: string; issues?: unknown }>> {
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const parsed = requestSchema.safeParse(body);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Invalid request", issues: parsed.error.flatten() },
+      { status: 400 },
+    );
+  }
+
+  const { currentCard, action, cardType } = parsed.data;
+
+  if (currentCard && action?.id) {
     return NextResponse.json({
-      card: transformCard(currentCard, actionId),
+      card: transformCard(currentCard as unknown as AiFeedCard, action.id),
       source: "mock",
     });
   }
 
   return NextResponse.json({
-    card: getFirstMatchingCard(body.cardType),
+    card: getFirstMatchingCard(cardType),
     source: "mock",
   });
-}
-
-async function readRequestBody(request: Request): Promise<GenerateCardRequest> {
-  try {
-    const value: unknown = await request.json();
-    return isRecord(value) ? parseGenerateCardRequest(value) : {};
-  } catch {
-    return {};
-  }
-}
-
-function parseGenerateCardRequest(value: Record<string, unknown>): GenerateCardRequest {
-  return {
-    cardType: isFeedItemType(value.cardType) ? value.cardType : undefined,
-    action: isRecord(value.action) && typeof value.action.id === "string"
-      ? {
-          id: value.action.id,
-          label: typeof value.action.label === "string" ? value.action.label : value.action.id,
-          intent: "refine",
-        }
-      : undefined,
-    currentCard: isAiFeedCard(value.currentCard) ? value.currentCard : undefined,
-  };
 }
 
 function getFirstMatchingCard(cardType: FeedItemType | undefined): AiFeedCard {
@@ -56,22 +74,4 @@ function getFirstMatchingCard(cardType: FeedItemType | undefined): AiFeedCard {
   }
 
   return mockAiCards.find((card) => card.type === cardType) ?? mockAiCards[0];
-}
-
-function isFeedItemType(value: unknown): value is FeedItemType {
-  return (
-    value === "video" ||
-    value === "food_decision" ||
-    value === "micro_trip" ||
-    value === "sports_pre_match" ||
-    value === "recovery"
-  );
-}
-
-function isAiFeedCard(value: unknown): value is AiFeedCard {
-  return isRecord(value) && isFeedItemType(value.type) && value.type !== "video";
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
 }
